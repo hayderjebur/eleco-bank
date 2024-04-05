@@ -16,11 +16,6 @@ import bg1 from '../assets/images/bg/bg2.jpg';
 // import Loader from '../components/Loader';
 
 const RegisterScreen = () => {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-
   const navigate = useNavigate();
 
   //   useEffect(() => {
@@ -29,27 +24,55 @@ const RegisterScreen = () => {
   //     }
   //   }, [navigate, redirect, userInfo]);
 
-  const submitHandler = async (e) => {
-    e.preventDefault();
+  // const alertContext = useContext(AlertContext);
+  // const authContext = useContext(AuthContext);
 
-    if (password !== confirmPassword) {
-      //   toast.error('Passwords do not match');
-    } else {
-      try {
-        // const res = await register({ name, email, password }).unwrap();
-        // navigate(redirect);
-      } catch (err) {
-        // toast.error(err?.data?.message || err.error);
-      }
-    }
-  };
+  // const { setAlert } = alertContext;
+  // const { register, error, clearErrors, isAuthenticated } = authContext;
+
+  // useEffect(() => {
+  //   if (isAuthenticated) {
+  //     // props.history.push("/");
+  //   }
+
+  //   if (error === "User already exists") {
+  //     setAlert(error, "danger");
+  //     clearErrors();
+  //   }
+  //   // eslint-disable-next-line
+  // }, [error, isAuthenticated, props.history]);
+
+  const [user, setUser] = useState({
+    name: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+  });
+
+  const { name, email, password, confirmPassword } = user;
+
+  const onChange = (e) => setUser({ ...user, [e.target.name]: e.target.value });
+
+  // const onSubmit = e => {
+  //   e.preventDefault();
+  //   if (name === "" || email === "" || password === "") {
+  //     setAlert("Please enter all fields", "danger");
+  //   } else if (password !== password2) {
+  //     setAlert("Passwords do not match", "danger");
+  //   } else {
+  //     register({
+  //       name,
+  //       email,
+  //       password
+  //     });
+  //   }
+  // };
 
   return (
     <>
       <Row>
         <CardImg
           style={{
-            // height: '100vh',
             width: '39rem',
             marginRight: '2rem',
           }}
@@ -59,14 +82,14 @@ const RegisterScreen = () => {
       </Row>
       <Row className='mt-4'>
         <h1>Register</h1>
-        <Form onSubmit={submitHandler}>
+        <Form onSubmit={{}}>
           <FormGroup className='my-2' controlId='name'>
             <Label>Name</Label>
             <Input
               type='name'
               placeholder='Enter name'
               value={name}
-              onChange={(e) => setName(e.target.value)}
+              onChange={onChange}
             ></Input>
           </FormGroup>
 
@@ -77,6 +100,8 @@ const RegisterScreen = () => {
               name='email'
               placeholder='with a placeholder'
               type='email'
+              value={email}
+              onChange={onChange}
             />
           </FormGroup>
 
@@ -87,15 +112,19 @@ const RegisterScreen = () => {
               name='password'
               placeholder='password placeholder'
               type='password'
+              value={password}
+              onChange={onChange}
             />
           </FormGroup>
           <FormGroup className='my-2' controlId='confirmPassword'>
             <Label>Confirm Password</Label>
             <Input
               id='examplePassword'
-              name='password'
+              name='confirmPassword'
               placeholder='password placeholder'
               type='password'
+              value={confirmPassword}
+              onChange={onChange}
             />
           </FormGroup>
 
