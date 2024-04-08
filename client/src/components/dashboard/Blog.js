@@ -11,12 +11,13 @@ import Forms from '../../views/ui/Forms';
 
 const Blog = (props) => {
   return (
-    <Card>
-      <CardImg alt='Card image cap' src={props.image} />
-      <CardBody className='p-4'>
-        <Forms />
-      </CardBody>
-    </Card>
+    // <Card>
+    //   <CardImg alt='Card image cap' src={props.image} />
+    //   <CardBody className='p-4'>
+    //     <Forms />
+    //   </CardBody>
+    // </Card>
+    ''
   );
 };
 

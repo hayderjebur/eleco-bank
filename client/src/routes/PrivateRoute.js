@@ -1,21 +1,27 @@
 import React, { useContext } from 'react';
-import { Route, Redirect } from 'react-router-dom';
+import {
+  Route,
+  Redirect,
+  useNavigate,
+  useLocation,
+  Navigate,
+  BrowserRouter as Router,
+} from 'react-router-dom';
+import authContext from '../context/auth/authContext';
+import Login from '../views/Login';
 
-const PrivateRoute = ({ component: Component, ...rest }) => {
-  // const authContext = useContext(AuthContext);
-  // const { isAuthenticated, loading } = authContext;
-  // <PrivateRoute exact path="/" component={Home} />
-  return (
-    <Route
-      {...rest}
-      // render={props =>
-      //   !isAuthenticated && !loading ? (
-      //     <Redirect to="/login" />
-      //   ) : (
-      //     <Component {...props} />
-      //   )
-      // }
-    />
+const PrivateRoute = ({ component: Component, children, ...rest }) => {
+  const AuthContext = useContext(authContext);
+  const navigate = useNavigate();
+  let location = useLocation();
+
+  const { isAuthenticated, loading } = AuthContext;
+  console.log('xxx routing', isAuthenticated);
+
+  return !isAuthenticated && !loading ? (
+    <Navigate to='/login' state={{ from: location }} replace />
+  ) : (
+    children
   );
 };
 

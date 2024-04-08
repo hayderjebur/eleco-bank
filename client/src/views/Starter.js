@@ -3,7 +3,7 @@ import ProjectTables from '../components/dashboard/ProjectTable';
 import TopCards from '../components/dashboard/TopCards';
 import PaymentForm from '../components/dashboard/PaymentForm';
 
-const Starter = () => {
+const Starter = (props) => {
   return (
     <div>
       {/***Top Cards***/}

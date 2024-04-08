@@ -1,5 +1,6 @@
 import { lazy } from 'react';
 import { Navigate } from 'react-router-dom';
+import PrivateRoute from './PrivateRoute.js';
 
 /****Layouts*****/
 const FullLayout = lazy(() => import('../layouts/FullLayout.js'));
@@ -10,18 +11,19 @@ const Starter = lazy(() => import('../views/Starter.js'));
 const Login = lazy(() => import('../views/Login.js'));
 const Register = lazy(() => import('../views/Register.js'));
 
-const Tables = lazy(() => import('../views/ui/Tables'));
-
 /*****Routes******/
 
 const ThemeRoutes = [
   {
     path: '/',
-    element: <FullLayout />,
+    element: (
+      <PrivateRoute>
+        <FullLayout />
+      </PrivateRoute>
+    ),
     children: [
       { path: '/', element: <Navigate to='/starter' /> },
       { path: '/starter', exact: true, element: <Starter /> },
-      { path: '/table', exact: true, element: <Tables /> },
     ],
   },
   {

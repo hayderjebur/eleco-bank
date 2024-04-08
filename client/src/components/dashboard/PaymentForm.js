@@ -56,7 +56,6 @@ export default class PaymentForm extends React.Component {
   // }
   render() {
     return (
-      // <div>
       <Card>
         <CardBody>
           <CardTitle className='d-flex justify-content-center' tag='h5'>
