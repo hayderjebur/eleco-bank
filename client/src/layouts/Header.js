@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useContext, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Navbar,
@@ -15,6 +15,7 @@ import {
 } from 'reactstrap';
 import { ReactComponent as LogoWhite } from '../assets/images/logos/xtremelogowhite.svg';
 import user1 from '../assets/images/users/user1.jpg';
+import AuthContext from '../context/auth/authContext';
 
 const Header = () => {
   const [isOpen, setIsOpen] = React.useState(false);
@@ -27,6 +28,31 @@ const Header = () => {
   const showMobilemenu = () => {
     document.getElementById('sidebarArea').classList.toggle('showSidebar');
   };
+
+  const authContext = useContext(AuthContext);
+
+  const {
+    isAuthenticated,
+    logout,
+    user,
+    users,
+    loadUser,
+    loadAllUsers,
+    userId,
+  } = authContext;
+
+  useEffect(() => {
+    loadUser(userId);
+    if (user?.isAdmin) {
+      loadAllUsers();
+    }
+  }, [user?.isAdmin]);
+
+  const onLogout = () => {
+    logout();
+    //clearContacts();
+  };
+
   return (
     <Navbar color='primary' dark expand='md'>
       <div className='d-flex align-items-center'>
@@ -60,26 +86,13 @@ const Header = () => {
         <Nav className='me-auto' navbar>
           <NavItem>
             <Link to='/starter' className='nav-link'>
-              Starter
+              Eleco-Bank
             </Link>
           </NavItem>
-          <NavItem>
-            <Link to='/about' className='nav-link'>
-              About
-            </Link>
-          </NavItem>
-          <UncontrolledDropdown inNavbar nav>
-            <DropdownToggle caret nav>
-              DD Menu
-            </DropdownToggle>
-            <DropdownMenu end>
-              <DropdownItem>Option 1</DropdownItem>
-              <DropdownItem>Option 2</DropdownItem>
-              <DropdownItem divider />
-              <DropdownItem>Reset</DropdownItem>
-            </DropdownMenu>
-          </UncontrolledDropdown>
         </Nav>
+        {isAuthenticated ? (
+          <h6 style={{ color: '#ffffff8c' }}> Hello {user && user.name}</h6>
+        ) : null}
         <Dropdown isOpen={dropdownOpen} toggle={toggle}>
           <DropdownToggle color='primary'>
             <img
@@ -90,13 +103,12 @@ const Header = () => {
             ></img>
           </DropdownToggle>
           <DropdownMenu>
-            <DropdownItem header>Info</DropdownItem>
+            <DropdownItem header>Profile</DropdownItem>
             <DropdownItem>My Account</DropdownItem>
             <DropdownItem>Edit Profile</DropdownItem>
             <DropdownItem divider />
             <DropdownItem>My Balance</DropdownItem>
-            <DropdownItem>Inbox</DropdownItem>
-            <DropdownItem>Logout</DropdownItem>
+            <DropdownItem onClick={onLogout}>Logout</DropdownItem>
           </DropdownMenu>
         </Dropdown>
       </Collapse>

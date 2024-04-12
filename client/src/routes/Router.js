@@ -1,6 +1,7 @@
 import { lazy } from 'react';
 import { Navigate } from 'react-router-dom';
 import PrivateRoute from './PrivateRoute.js';
+import UserProfile from '../views/UserProfile.js';
 
 /****Layouts*****/
 const FullLayout = lazy(() => import('../layouts/FullLayout.js'));
@@ -24,6 +25,7 @@ const ThemeRoutes = [
     children: [
       { path: '/', element: <Navigate to='/starter' /> },
       { path: '/starter', exact: true, element: <Starter /> },
+      { path: '/userProfile/:id', element: <UserProfile /> },
     ],
   },
   {

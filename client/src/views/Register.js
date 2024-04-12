@@ -77,7 +77,7 @@ const RegisterScreen = (props) => {
             ))}
           <h1>Register</h1>
           <Form onSubmit={onSubmit}>
-            <FormGroup className='my-2' controlId='name'>
+            <FormGroup className='my-2' controlid='name'>
               <Label>Name</Label>
               <Input
                 name='name'
@@ -88,7 +88,7 @@ const RegisterScreen = (props) => {
               ></Input>
             </FormGroup>
 
-            <FormGroup className='my-2' controlId='email'>
+            <FormGroup className='my-2' controlid='email'>
               <Label>Email Address</Label>
               <Input
                 id='exampleEmail'
@@ -100,7 +100,7 @@ const RegisterScreen = (props) => {
               />
             </FormGroup>
 
-            <FormGroup className='my-2' controlId='password'>
+            <FormGroup className='my-2' controlid='password'>
               <Label>Password</Label>
               <Input
                 id='examplePassword'
@@ -111,7 +111,7 @@ const RegisterScreen = (props) => {
                 onChange={onChange}
               />
             </FormGroup>
-            <FormGroup className='my-2' controlId='confirmPassword'>
+            <FormGroup className='my-2' controlid='confirmPassword'>
               <Label>Confirm Password</Label>
               <Input
                 id='examplePassword'

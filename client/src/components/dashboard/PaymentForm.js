@@ -73,8 +73,8 @@ export default class PaymentForm extends React.Component {
               />
             </Col>
             <Col lg='7'>
-              <Form onSubmit={{}}>
-                <FormGroup className='my-2' controlId='name'>
+              <Form onSubmit={() => {}}>
+                <FormGroup className='my-2' controlid='name'>
                   <Label>Name</Label>
                   <Input
                     type='name'
@@ -84,7 +84,7 @@ export default class PaymentForm extends React.Component {
                     onFocus={this.handleInputFocus}
                   ></Input>
                 </FormGroup>
-                <FormGroup className='my-2' controlId='name'>
+                <FormGroup className='my-2' controlid='name'>
                   <Label>Credit Card Number</Label>
                   <Input
                     type='tel'
@@ -97,7 +97,7 @@ export default class PaymentForm extends React.Component {
                     onFocus={this.handleInputFocus}
                   ></Input>
                 </FormGroup>
-                <FormGroup className='my-2' controlId='email'>
+                <FormGroup className='my-2' controlid='email'>
                   <Label>Cvc</Label>
                   <Input
                     name='cvc'
@@ -110,7 +110,7 @@ export default class PaymentForm extends React.Component {
                     onFocus={this.handleInputFocus}
                   />
                 </FormGroup>
-                <FormGroup className='my-2' controlId='password'>
+                <FormGroup className='my-2' controlid='password'>
                   <Label>expiry</Label>
                   <Input
                     id='examplePassword'

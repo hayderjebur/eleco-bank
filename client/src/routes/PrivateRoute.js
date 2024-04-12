@@ -16,7 +16,6 @@ const PrivateRoute = ({ component: Component, children, ...rest }) => {
   let location = useLocation();
 
   const { isAuthenticated, loading } = AuthContext;
-  console.log('xxx routing', isAuthenticated);
 
   return !isAuthenticated && !loading ? (
     <Navigate to='/login' state={{ from: location }} replace />

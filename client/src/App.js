@@ -2,13 +2,16 @@ import { useRoutes } from 'react-router-dom';
 import Themeroutes from './routes/Router';
 import AuthState from './context/auth/AuthState';
 import AlertState from './context/alert/AlertState';
+import CardState from './context/card/CardState';
 
-const App = () => {
+const App = (props) => {
   const routing = useRoutes(Themeroutes);
 
   return (
     <AuthState>
-      <AlertState>{routing}</AlertState>
+      <CardState>
+        <AlertState>{routing}</AlertState>
+      </CardState>
     </AuthState>
   );
 };

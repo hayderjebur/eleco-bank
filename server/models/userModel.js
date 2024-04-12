@@ -1,5 +1,21 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
+
+const cardSchema = mongoose.Schema(
+  {
+    cardNumber: { type: Number, required: true },
+    expiry: { type: String, required: true },
+    cvc: { type: Number, required: true },
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: 'User',
+    },
+  },
+  {
+    timestamps: true,
+  }
+);
 const userSchema = mongoose.Schema(
   {
     name: {
@@ -20,6 +36,7 @@ const userSchema = mongoose.Schema(
       required: true,
       default: false,
     },
+    cards: [cardSchema],
   },
   {
     timestamps: true,

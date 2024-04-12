@@ -128,7 +128,6 @@ const deleteUser = asyncHandler(async (req, res) => {
 
 // @desc    Get user by ID
 // @route   GET /api/users/:id
-// @access  Private/Admin
 const getUserById = asyncHandler(async (req, res) => {
   const user = await User.findById(req.params.id).select('-password');
 
@@ -165,6 +164,34 @@ const updateUser = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc    Create new Card
+// @route   POST /api/users/:id/card
+// @access  Private
+const createCard = asyncHandler(async (req, res) => {
+  const { cardNumber, expiry, cvc } = req.body;
+
+  const user = await User.findById(req.params.id);
+  console.log('user fired');
+  if (user) {
+    const card = {
+      cardNumber,
+      expiry,
+      cvc,
+      user: req.user._id,
+    };
+
+    user.cards.push(card);
+
+    user.numCards = user.cards.length;
+
+    await user.save();
+    res.status(201).json({ message: 'Card added' });
+  } else {
+    res.status(404);
+    throw new Error('User not found');
+  }
+});
+
 export {
   authUser,
   registerUser,
@@ -174,4 +201,5 @@ export {
   deleteUser,
   updateUser,
   getUserById,
+  createCard,
 };

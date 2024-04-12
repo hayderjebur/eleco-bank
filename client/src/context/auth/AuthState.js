@@ -13,28 +13,48 @@ import {
   LOGOUT,
   CLEAR_ERRORS,
   USER_LOGIN_REQUEST,
+  USERS_LOADED,
 } from '../types';
 
+// const storedData = localStorage.getItem('userInfo');
+// const userInfo = JSON.parse(storedData);
+const token = localStorage.getItem('token');
+const userId = localStorage.getItem('userId');
 const AuthState = (props) => {
   const initialState = {
-    token: localStorage.getItem('token'),
-    isAuthenticated: false,
-    isLoading: true,
-    user: null,
+    token,
+    isAuthenticated: token !== null,
+    isLoading: false,
     error: null,
+    userId,
+    users: null,
+    user: null,
   };
-
+  // console.log(localStorage.getItem('userInfo'));
   const [state, dispatch] = useReducer(authReducer, initialState);
 
   // Load User
-  const loadUser = async () => {
+  const loadUser = async (id) => {
     setAuthToken(localStorage.token);
 
     try {
-      const res = await axios.get('/api/auth');
+      const res = await axios.get(`/api/users/${id}`);
 
       dispatch({
         type: USER_LOADED,
+        payload: res.data,
+      });
+    } catch (err) {
+      dispatch({ type: AUTH_ERROR });
+    }
+  };
+  const loadAllUsers = async () => {
+    setAuthToken(localStorage.token);
+
+    try {
+      const res = await axios.get(`/api/users`);
+      dispatch({
+        type: USERS_LOADED,
         payload: res.data,
       });
     } catch (err) {
@@ -80,7 +100,6 @@ const AuthState = (props) => {
         type: USER_LOGIN_REQUEST,
       });
       const res = await axios.post('/api/users/login', formData, config);
-
       dispatch({
         type: LOGIN_SUCCESS,
         payload: res?.data,
@@ -107,13 +126,16 @@ const AuthState = (props) => {
         token: state.token,
         isAuthenticated: state.isAuthenticated,
         isLoading: state.isLoading,
+        users: state.users,
         user: state.user,
+        userId: state.userId,
         error: state.error,
         register,
         loadUser,
         login,
         logout,
         clearErrors,
+        loadAllUsers,
       }}
     >
       {props.children}

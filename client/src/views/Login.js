@@ -20,7 +20,7 @@ import AlertContext from '../context/alert/alertContext';
 import AuthContext from '../context/auth/authContext';
 import Message from '../layouts/Message';
 
-const Login = (props) => {
+const Login = () => {
   const navigate = useNavigate();
   const alertContext = useContext(AlertContext);
   const authContext = useContext(AuthContext);

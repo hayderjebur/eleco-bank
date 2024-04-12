@@ -185,7 +185,6 @@ class ReactCreditCards extends React.Component {
   render() {
     const { cvc, focused, locale, name, placeholders } = this.props;
     const { number, expiry } = this;
-    console.log(focused);
     return (
       <div key='Cards' className='rccs'>
         <div
