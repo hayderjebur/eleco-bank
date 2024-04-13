@@ -10,11 +10,6 @@ const navigation = [
     href: '/starter',
     icon: 'bi bi-speedometer2',
   },
-  {
-    title: 'Table',
-    href: '/table',
-    icon: 'bi bi-layout-split',
-  },
 ];
 
 const Sidebar = () => {

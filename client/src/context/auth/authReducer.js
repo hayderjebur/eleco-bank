@@ -10,6 +10,7 @@ import {
   USER_LOGIN_REQUEST,
   USER_REGISTER_REQUEST,
   USERS_LOADED,
+  ADD_CARD_SUCCESS,
 } from '../types';
 
 // eslint-disable-next-line import/no-anonymous-default-export
@@ -37,13 +38,18 @@ export default (state, action) => {
     case LOGIN_SUCCESS:
       localStorage.setItem('token', action.payload.token);
       localStorage.setItem('userId', action.payload._id);
-      // localStorage.setItem('userInfo', JSON.stringify(action.payload));
 
       return {
         ...state,
         ...action.payload,
         userId: action.payload._id,
         isAuthenticated: true,
+        isLoading: false,
+      };
+    case ADD_CARD_SUCCESS:
+      return {
+        ...state,
+        ...action.payload,
         isLoading: false,
       };
 

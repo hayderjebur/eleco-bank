@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import AuthContext from '../../context/auth/authContext';
 import {
   CardBody,
   Card,
@@ -9,12 +10,11 @@ import {
   DropdownItem,
 } from 'reactstrap';
 import CreditCards from './ReactCreditCards';
-import AuthContext from '../../context/auth/authContext';
 
 const UserCard = (props) => {
   const authContext = useContext(AuthContext);
 
-  const { isAuthenticated, logout, user, loadUser, userId } = authContext;
+  const { user } = authContext;
   return (
     <Card>
       <CardBody>

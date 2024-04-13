@@ -1,12 +1,12 @@
-import React, { useEffect, useContext, Fragment } from 'react';
+import React, { useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
+import AuthContext from '../context/auth/authContext';
 import {
   Navbar,
   Collapse,
   Nav,
   NavItem,
   NavbarBrand,
-  UncontrolledDropdown,
   DropdownToggle,
   DropdownMenu,
   DropdownItem,
@@ -15,7 +15,6 @@ import {
 } from 'reactstrap';
 import { ReactComponent as LogoWhite } from '../assets/images/logos/xtremelogowhite.svg';
 import user1 from '../assets/images/users/user1.jpg';
-import AuthContext from '../context/auth/authContext';
 
 const Header = () => {
   const [isOpen, setIsOpen] = React.useState(false);
@@ -31,15 +30,8 @@ const Header = () => {
 
   const authContext = useContext(AuthContext);
 
-  const {
-    isAuthenticated,
-    logout,
-    user,
-    users,
-    loadUser,
-    loadAllUsers,
-    userId,
-  } = authContext;
+  const { isAuthenticated, logout, user, loadUser, loadAllUsers, userId } =
+    authContext;
 
   useEffect(() => {
     loadUser(userId);

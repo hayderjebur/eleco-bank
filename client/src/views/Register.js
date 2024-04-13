@@ -1,16 +1,6 @@
 import { useState, useEffect, useContext } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import {
-  Button,
-  Card,
-  CardImg,
-  Col,
-  Form,
-  FormGroup,
-  Input,
-  Label,
-  Row,
-} from 'reactstrap';
+import { Link, useNavigate } from 'react-router-dom';
+import { Button, Col, Form, FormGroup, Input, Label, Row } from 'reactstrap';
 import AlertContext from '../context/alert/alertContext';
 import AuthContext from '../context/auth/authContext';
 import Message from '../layouts/Message';

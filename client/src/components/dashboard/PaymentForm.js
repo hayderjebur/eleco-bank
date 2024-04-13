@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import CreditCards from './ReactCreditCards';
 import {
   Button,
@@ -12,6 +12,9 @@ import {
   Label,
   Row,
 } from 'reactstrap';
+import AlertContext from '../../context/alert/alertContext';
+import AuthContext from '../../context/auth/authContext';
+import Message from '../../layouts/Message';
 
 export default class PaymentForm extends React.Component {
   state = {
@@ -19,11 +22,10 @@ export default class PaymentForm extends React.Component {
     expiry: '',
     focus: '',
     name: '',
-    number: '',
+    cardNumber: '',
   };
 
   handleInputFocus = (e) => {
-    // console.log(e.target.name);
     this.setState({ focus: e.target.name });
   };
 
@@ -33,34 +35,34 @@ export default class PaymentForm extends React.Component {
     this.setState({ [name]: value });
   };
 
-  // const navigate = useNavigate();
+  onSubmit = (e) => {
+    e.preventDefault();
+    const { setAlert, addCard } = this.props;
+    const { name, cardNumber, expiry, cvc } = this.state;
+    if (name === '' || cardNumber === '' || expiry === '' || cvc === '') {
+      setAlert('Please enter all fields', 'danger');
+    } else {
+      addCard({
+        name,
+        cardNumber,
+        expiry,
+        cvc,
+      });
+    }
+  };
 
-  //   useEffect(() => {
-  //     if (userInfo) {
-  //       navigate(redirect);
-  //     }
-  //   }, [navigate, redirect, userInfo]);
-
-  // const submitHandler = async (e) => {
-  //   e.preventDefault();
-
-  // if (password !== confirmPassword) {
-  //   toast.error('Passwords do not match');
-  // } else {
-  //   try {
-  // const res = await register({ name, email, password }).unwrap();
-  // navigate(redirect);
-  //   } catch (err) {
-  //     // toast.error(err?.data?.message || err.error);
-  //   }
-  // }
   render() {
+    const { alerts, error } = this.props;
     return (
       <Card>
         <CardBody>
           <CardTitle className='d-flex justify-content-center' tag='h5'>
             Credit Card Info
           </CardTitle>
+          {error ||
+            (alerts[0]?.msg && (
+              <Message color='danger'>{error || alerts[0]?.msg}</Message>
+            ))}
 
           <Row>
             <Col className='mt-5' sm='12' lg='4'>
@@ -69,11 +71,11 @@ export default class PaymentForm extends React.Component {
                 expiry={this.state.expiry}
                 focused={this.state.focus}
                 name={this.state.name}
-                number={this.state.number}
+                number={this.state.cardNumber}
               />
             </Col>
             <Col lg='7'>
-              <Form onSubmit={() => {}}>
+              <Form onSubmit={this.onSubmit}>
                 <FormGroup className='my-2' controlid='name'>
                   <Label>Name</Label>
                   <Input
@@ -85,12 +87,12 @@ export default class PaymentForm extends React.Component {
                   ></Input>
                 </FormGroup>
                 <FormGroup className='my-2' controlid='name'>
-                  <Label>Credit Card Number</Label>
+                  <Label>Credit Card cardNumber</Label>
                   <Input
                     type='tel'
-                    name='number'
+                    name='cardNumber'
                     maxLength={16}
-                    placeholder='Card Number'
+                    placeholder='Card cardNumber'
                     pattern='[\d| ]{16,22}'
                     required
                     onChange={this.handleInputChange}
@@ -115,7 +117,7 @@ export default class PaymentForm extends React.Component {
                   <Input
                     id='examplePassword'
                     name='expiry'
-                    maxLength={4}
+                    maxLength={5}
                     placeholder='Valid Thru'
                     pattern='\d\d/\d\d'
                     required

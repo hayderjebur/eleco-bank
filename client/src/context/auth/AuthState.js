@@ -14,6 +14,8 @@ import {
   CLEAR_ERRORS,
   USER_LOGIN_REQUEST,
   USERS_LOADED,
+  ADD_CARD_SUCCESS,
+  ADD_CARD_FAIL,
 } from '../types';
 
 // const storedData = localStorage.getItem('userInfo');
@@ -86,6 +88,32 @@ const AuthState = (props) => {
       });
     }
   };
+  // Add Card
+  const addCard = async (formData) => {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+
+    try {
+      const res = await axios.post(
+        `api/users/${userId}/card`,
+        formData,
+        config
+      );
+
+      dispatch({
+        type: ADD_CARD_SUCCESS,
+        payload: res.data,
+      });
+    } catch (err) {
+      dispatch({
+        type: ADD_CARD_FAIL,
+        payload: err.response.data.msg,
+      });
+    }
+  };
 
   // Login User
   const login = async (formData) => {
@@ -136,6 +164,7 @@ const AuthState = (props) => {
         logout,
         clearErrors,
         loadAllUsers,
+        addCard,
       }}
     >
       {props.children}

@@ -4,17 +4,27 @@ import { Col, Row } from 'reactstrap';
 import ProjectTables from '../components/dashboard/ProjectTable';
 import UserCard from '../components/dashboard/UserCard';
 import PaymentForm from '../components/dashboard/PaymentForm';
+import AlertContext from '../context/alert/alertContext';
 
-const Starter = (props) => {
+const Starter = () => {
   const authContext = useContext(AuthContext);
+  const alertContext = useContext(AlertContext);
 
-  const { isAuthenticated, logout, user, loadUser, userId } = authContext;
+  const { setAlert, alerts } = alertContext;
+  const { addCard, error } = authContext;
+
+  const { user } = authContext;
   return (
     <div>
       {/***Add Card Form***/}
       <Row>
         <Col sm='12' lg='12'>
-          <PaymentForm />
+          <PaymentForm
+            error={error}
+            setAlert={setAlert}
+            alerts={alerts}
+            addCard={addCard}
+          />
         </Col>
       </Row>
       {/*** Cards***/}

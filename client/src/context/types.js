@@ -20,4 +20,6 @@ export const USER_LOGIN_REQUEST = 'USER_LOGIN_REQUEST';
 export const USER_REGISTER_REQUEST = 'USER_REGISTER_REQUEST';
 export const GET_CARDS = 'GET_CARDS';
 export const ADD_CARD = 'ADD_CARD';
+export const ADD_CARD_SUCCESS = 'ADD_CARD_SUCCESS';
+export const ADD_CARD_FAIL = 'ADD_CARD_FAIL';
 export const DELETE_CARD = 'DELETE_CARD';
