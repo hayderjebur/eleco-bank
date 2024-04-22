@@ -12,6 +12,33 @@ import orderRoutes from './routes/orderRoutes.js';
 import uploadRoutes from './routes/uploadRoutes.js';
 import galleryRoutes from './routes/galleryRoutes.js';
 
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+// import elliptic from 'elliptic';
+// import crypto from 'crypto';
+// const EC = elliptic.ec;
+// const ec = new EC('secp256k1');
+
+// Generate keys
+// const key = ec.genKeyPair();
+
+// Credit card number to sign
+// const creditCardNumber = '1234 5678 9012 3456';
+
+// Hash the credit card number
+// const hash = crypto.createHash('sha256').update(creditCardNumber).digest();
+
+// Sign the hash
+// const signature = key.sign(hash);
+// console.log(signature);
+
+// // Export DER encoded signature
+// const derSign = signature.toDER();
+
+// Verify signature
+// console.log(key.verify(hash, derSign));
+
 dotenv.config();
 
 connectDB();
@@ -31,11 +58,16 @@ app.use('/api/users', userRoutes);
 
 // app.use('/uploads', express.static(path.join(__dirname, '/uploads')));
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+const parentDir = path.join(__dirname, '..');
+console.log(parentDir);
+
 if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(__dirname, '/client/build')));
+  app.use(express.static(path.join(parentDir, './client/build')));
 
   app.get('*', (req, res) =>
-    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'))
+    res.sendFile(path.resolve(parentDir, 'client', 'build', 'index.html'))
   );
 } else {
   app.get('/', (req, res) => {

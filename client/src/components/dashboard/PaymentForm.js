@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import CreditCards from './ReactCreditCards';
 import {
   Button,
@@ -12,8 +12,6 @@ import {
   Label,
   Row,
 } from 'reactstrap';
-import AlertContext from '../../context/alert/alertContext';
-import AuthContext from '../../context/auth/authContext';
 import Message from '../../layouts/Message';
 
 export default class PaymentForm extends React.Component {
@@ -23,8 +21,26 @@ export default class PaymentForm extends React.Component {
     focus: '',
     name: '',
     cardNumber: '',
+    calledAddCard: false,
   };
-
+  componentDidUpdate(prevProps, prevState) {
+    const { userId, loadUser, error, setAlert, clearErrors, data, clearData } =
+      this.props;
+    if (prevState.calledAddCard !== this.state.calledAddCard) {
+      loadUser(userId);
+      this.setState({ ...this.state, calledAddCard: false });
+    }
+    if (prevProps.error !== error) {
+      console.log(error);
+      setAlert(error, 'danger');
+      clearErrors();
+    }
+    // if (prevProps.date !== data) {
+    //   console.log(error);
+    //   setAlert(data?.message, 'success');
+    //   clearData();
+    // }
+  }
   handleInputFocus = (e) => {
     this.setState({ focus: e.target.name });
   };
@@ -35,34 +51,42 @@ export default class PaymentForm extends React.Component {
     this.setState({ [name]: value });
   };
 
-  onSubmit = (e) => {
+  onSubmit = async (e) => {
     e.preventDefault();
     const { setAlert, addCard } = this.props;
     const { name, cardNumber, expiry, cvc } = this.state;
     if (name === '' || cardNumber === '' || expiry === '' || cvc === '') {
       setAlert('Please enter all fields', 'danger');
     } else {
-      addCard({
+      await addCard({
         name,
         cardNumber,
         expiry,
         cvc,
       });
+      this.setState({
+        cvc: '',
+        expiry: '',
+        focus: '',
+        name: '',
+        cardNumber: '',
+        calledAddCard: true,
+      });
     }
   };
 
   render() {
-    const { alerts, error } = this.props;
+    const { error, data } = this.props;
+    console.log(error);
     return (
       <Card>
         <CardBody>
           <CardTitle className='d-flex justify-content-center' tag='h5'>
             Credit Card Info
           </CardTitle>
-          {error ||
-            (alerts[0]?.msg && (
-              <Message color='danger'>{error || alerts[0]?.msg}</Message>
-            ))}
+          {/* {data && data?.message && (
+            // <AlertMsg color='success'>{data?.message}</AlertMsg>
+          )} */}
 
           <Row>
             <Col className='mt-5' sm='12' lg='4'>
@@ -84,6 +108,7 @@ export default class PaymentForm extends React.Component {
                     placeholder='Enter name'
                     onChange={this.handleInputChange}
                     onFocus={this.handleInputFocus}
+                    value={this.state.name}
                   ></Input>
                 </FormGroup>
                 <FormGroup className='my-2' controlid='name'>
@@ -93,10 +118,11 @@ export default class PaymentForm extends React.Component {
                     name='cardNumber'
                     maxLength={16}
                     placeholder='Card cardNumber'
-                    pattern='[\d| ]{16,22}'
+                    // pattern='[\d| ]{16,22}'
                     required
                     onChange={this.handleInputChange}
                     onFocus={this.handleInputFocus}
+                    value={this.state.cardNumber}
                   ></Input>
                 </FormGroup>
                 <FormGroup className='my-2' controlid='email'>
@@ -110,6 +136,7 @@ export default class PaymentForm extends React.Component {
                     required
                     onChange={this.handleInputChange}
                     onFocus={this.handleInputFocus}
+                    value={this.state.cvc}
                   />
                 </FormGroup>
                 <FormGroup className='my-2' controlid='password'>
@@ -124,6 +151,7 @@ export default class PaymentForm extends React.Component {
                     type='tel'
                     onChange={this.handleInputChange}
                     onFocus={this.handleInputFocus}
+                    value={this.state.expiry}
                   />
                 </FormGroup>
 

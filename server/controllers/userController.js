@@ -1,6 +1,13 @@
+import mongoose from 'mongoose';
 import asyncHandler from 'express-async-handler';
 import generateToken from '../utils/generateToken.js';
 import User from '../models/userModel.js';
+
+import elliptic from 'elliptic';
+import crypto from 'crypto';
+const EC = elliptic.ec;
+const secp256k1 = new EC('secp256k1');
+const ed25519 = new EC('ed25519');
 
 // @desc    Auth user & get token
 // @route   POST /api/users/login
@@ -17,6 +24,7 @@ const authUser = asyncHandler(async (req, res) => {
       email: user.email,
       isAdmin: user.isAdmin,
       token: generateToken(user._id),
+      publicKey: user.publicKey,
     });
   } else {
     res.status(401);
@@ -36,11 +44,14 @@ const registerUser = asyncHandler(async (req, res) => {
     res.status(400);
     throw new Error('User already exists');
   }
+  const key = secp256k1.genKeyPair();
 
   const user = await User.create({
     name,
     email,
     password,
+    publicKey: key.getPublic('hex'),
+    privateKey: key.getPrivate(),
   });
 
   if (user) {
@@ -50,6 +61,7 @@ const registerUser = asyncHandler(async (req, res) => {
       email: user.email,
       isAdmin: user.isAdmin,
       token: generateToken(user._id),
+      publicKey: user.publicKey,
     });
   } else {
     res.status(400);
@@ -57,107 +69,23 @@ const registerUser = asyncHandler(async (req, res) => {
   }
 });
 
-// @desc    Get user profile
-// @route   GET /api/users/profile
-// @access  Private
-const getUserProfile = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.user._id);
-
-  if (user) {
-    res.json({
-      _id: user._id,
-      name: user.name,
-      email: user.email,
-      isAdmin: user.isAdmin,
-    });
-  } else {
-    res.status(404);
-    throw new Error('User not found');
-  }
-});
-// @desc    Update user profile
-// @route   PUT /api/users/profile
-// @access  Private
-const updateUserProfile = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.user._id);
-
-  if (user) {
-    user.name = req.body.name || user.name;
-    user.email = req.body.email || user.email;
-    if (req.body.password) {
-      user.password = req.body.password;
-    }
-
-    const updatedUser = await user.save();
-
-    res.json({
-      _id: updatedUser._id,
-      name: updatedUser.name,
-      email: updatedUser.email,
-      isAdmin: updatedUser.isAdmin,
-      token: generateToken(updatedUser._id),
-    });
-  } else {
-    res.status(404);
-    throw new Error('User not found');
-  }
-});
-
 // @desc    Get all users
 // @route   GET /api/users
 // @access  Private/Admin
 const getUsers = asyncHandler(async (req, res) => {
-  const users = await User.find({});
+  const users = await User.find({}).select('-password  -cards.signature');
   res.json(users);
-});
-
-// @desc    Delete user
-// @route   DELETE /api/users/:id
-// @access  Private/Admin
-const deleteUser = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.params.id);
-
-  if (user) {
-    await user.remove();
-    res.json({ message: 'User removed' });
-  } else {
-    res.status(404);
-    throw new Error('User not found');
-  }
 });
 
 // @desc    Get user by ID
 // @route   GET /api/users/:id
 const getUserById = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.params.id).select('-password');
+  const user = await User.findById(req.params.id).select(
+    '-password -privateKey -cards.signature'
+  );
 
   if (user) {
     res.json(user);
-  } else {
-    res.status(404);
-    throw new Error('User not found');
-  }
-});
-
-// @desc    Update user
-// @route   PUT /api/users/:id
-// @access  Private/Admin
-const updateUser = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.params.id);
-
-  if (user) {
-    user.name = req.body.name || user.name;
-    user.email = req.body.email || user.email;
-    user.isAdmin = req.body.isAdmin || user.isAdmin;
-
-    const updatedUser = await user.save();
-
-    res.json({
-      _id: updatedUser._id,
-      name: updatedUser.name,
-      email: updatedUser.email,
-      isAdmin: updatedUser.isAdmin,
-    });
   } else {
     res.status(404);
     throw new Error('User not found');
@@ -168,38 +96,95 @@ const updateUser = asyncHandler(async (req, res) => {
 // @route   POST /api/users/:id/card
 // @access  Private
 const createCard = asyncHandler(async (req, res) => {
-  const { cardNumber, expiry, cvc } = req.body;
+  const { cardNumber, expiry, cvc, ellipticType } = req.body;
+
+  // publicKey: key.getPublic('hex')
+  // const userKeyPair = ec.genKeyPair();
 
   const user = await User.findById(req.params.id);
-  console.log('user fired');
   if (user) {
-    const card = {
+    const cardData = {
       cardNumber,
       expiry,
       cvc,
+    };
+    throw Error('error');
+    // Hash the card data
+    const hash = crypto
+      .createHash('sha256')
+      .update(JSON.stringify(cardData))
+      .digest('hex');
+
+    const card = {
+      hashedData: hash,
       user: req.user._id,
     };
 
     user.cards.push(card);
 
-    user.numCards = user.cards.length;
-
     await user.save();
-    res.status(201).json({ message: 'Card added' });
+    res.status(201).json({ message: 'Card added successfully' });
   } else {
     res.status(404);
     throw new Error('User not found');
+  }
+});
+// @desc    Create Signture
+// @route   POST /api/users/:userId/cards/:cardId
+// @access  Private
+
+const createSignature = asyncHandler(async (req, res) => {
+  const { ellipticType } = req.body;
+  const cardId = mongoose.Types.ObjectId(req.params.cardId);
+
+  try {
+    const user = await User.findById(req.params.userId);
+    if (!user) {
+      res.status(404);
+      throw new Error('User not found');
+    }
+
+    const foundCard = user.cards.find((card) => card._id.equals(cardId));
+    if (!foundCard) {
+      res.status(404);
+      throw new Error('Card not found');
+    }
+    if (foundCard.signature) {
+      res.status(404);
+      throw new Error('The card already has a signature ');
+    }
+
+    let signature;
+    if (ellipticType === 'Edward') {
+      signature = ed25519
+        .keyFromPrivate(user.privateKey)
+        .sign(foundCard.hashedData);
+    } else if (ellipticType === 'Koblite') {
+      signature = secp256k1
+        .keyFromPrivate(user.privateKey)
+        .sign(foundCard.hashedData);
+    } else {
+      res.status(400);
+      throw new Error('Unsupported elliptic curve type');
+    }
+
+    foundCard.signature = signature?.toDER('hex');
+    await user.save();
+
+    res
+      .status(201)
+      .json({ message: 'Signature added successfully!', foundCard });
+  } catch (error) {
+    console.error('Error creating signature:', error);
+    res.status(500).json({ error: 'Internal server error' });
   }
 });
 
 export {
   authUser,
   registerUser,
-  getUserProfile,
-  updateUserProfile,
   getUsers,
-  deleteUser,
-  updateUser,
   getUserById,
   createCard,
+  createSignature,
 };

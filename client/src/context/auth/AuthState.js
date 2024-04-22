@@ -16,10 +16,11 @@ import {
   USERS_LOADED,
   ADD_CARD_SUCCESS,
   ADD_CARD_FAIL,
+  ADD_SIGNATURE_SUCCESS,
+  ADD_SIGNATURE_FAIL,
+  CLEAR_DATA,
 } from '../types';
 
-// const storedData = localStorage.getItem('userInfo');
-// const userInfo = JSON.parse(storedData);
 const token = localStorage.getItem('token');
 const userId = localStorage.getItem('userId');
 const AuthState = (props) => {
@@ -31,8 +32,9 @@ const AuthState = (props) => {
     userId,
     users: null,
     user: null,
+    data: {},
   };
-  // console.log(localStorage.getItem('userInfo'));
+
   const [state, dispatch] = useReducer(authReducer, initialState);
 
   // Load User
@@ -110,6 +112,35 @@ const AuthState = (props) => {
     } catch (err) {
       dispatch({
         type: ADD_CARD_FAIL,
+        payload: err.response.data.message,
+      });
+    }
+  };
+  // Add Signature
+  const addSignature = async (formData, cardId) => {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+    const dataBody = {
+      ellipticType: formData,
+    };
+    console.log(formData, typeof cardId);
+    try {
+      const res = await axios.post(
+        `api/users/${userId}/cards/${cardId}`,
+        dataBody,
+        config
+      );
+
+      dispatch({
+        type: ADD_SIGNATURE_SUCCESS,
+        payload: res.data,
+      });
+    } catch (err) {
+      dispatch({
+        type: ADD_SIGNATURE_FAIL,
         payload: err.response.data.msg,
       });
     }
@@ -147,6 +178,7 @@ const AuthState = (props) => {
 
   // Clear Errors
   const clearErrors = () => dispatch({ type: CLEAR_ERRORS });
+  const clearData = () => dispatch({ type: CLEAR_DATA });
 
   return (
     <AuthContext.Provider
@@ -158,6 +190,7 @@ const AuthState = (props) => {
         user: state.user,
         userId: state.userId,
         error: state.error,
+        data: state.data,
         register,
         loadUser,
         login,
@@ -165,6 +198,8 @@ const AuthState = (props) => {
         clearErrors,
         loadAllUsers,
         addCard,
+        addSignature,
+        clearData,
       }}
     >
       {props.children}

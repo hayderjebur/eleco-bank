@@ -1,16 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Alert } from 'reactstrap';
 
-const Message = ({ color, children }) => {
+function AlertMsg(props) {
+  const [visible, setVisible] = useState(true);
+
+  const onDismiss = () => setVisible(false);
+
   return (
-    <div className='text-center'>
-      <Alert color={color}>{children}</Alert>
-    </div>
+    <Alert color={props.color} isOpen={visible} toggle={onDismiss}>
+      {props.children}
+    </Alert>
   );
-};
+}
 
-Message.defaultProps = {
-  variant: 'info',
-};
-
-export default Message;
+export default AlertMsg;

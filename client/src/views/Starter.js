@@ -11,9 +11,17 @@ const Starter = () => {
   const alertContext = useContext(AlertContext);
 
   const { setAlert, alerts } = alertContext;
-  const { addCard, error } = authContext;
+  const {
+    addCard,
+    error,
+    user,
+    loadUser,
+    userId,
+    data,
+    clearErrors,
+    clearData,
+  } = authContext;
 
-  const { user } = authContext;
   return (
     <div>
       {/***Add Card Form***/}
@@ -24,6 +32,11 @@ const Starter = () => {
             setAlert={setAlert}
             alerts={alerts}
             addCard={addCard}
+            loadUser={loadUser}
+            userId={userId}
+            data={data}
+            clearErrors={clearErrors}
+            clearData={clearData}
           />
         </Col>
       </Row>
@@ -32,7 +45,7 @@ const Starter = () => {
         {user?.cards?.length > 0 ? <h3>Your Cards</h3> : null}
         {user?.cards?.map((card) => {
           return (
-            <Col sm='6' lg='6'>
+            <Col sm='6' lg='6' key={card._id}>
               <UserCard
                 userCard={card}
                 userName={user.name}

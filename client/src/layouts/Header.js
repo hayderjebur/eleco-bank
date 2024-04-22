@@ -38,7 +38,7 @@ const Header = () => {
     if (user?.isAdmin) {
       loadAllUsers();
     }
-  }, [user?.isAdmin]);
+  }, [user?.isAdmin, userId]);
 
   const onLogout = () => {
     logout();

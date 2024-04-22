@@ -22,4 +22,7 @@ export const GET_CARDS = 'GET_CARDS';
 export const ADD_CARD = 'ADD_CARD';
 export const ADD_CARD_SUCCESS = 'ADD_CARD_SUCCESS';
 export const ADD_CARD_FAIL = 'ADD_CARD_FAIL';
+export const ADD_SIGNATURE_SUCCESS = 'ADD_SIGNATURE_SUCCESS';
+export const ADD_SIGNATURE_FAIL = 'ADD_SIGNATURE_FAIL';
 export const DELETE_CARD = 'DELETE_CARD';
+export const CLEAR_DATA = 'CLEAR_DATA';

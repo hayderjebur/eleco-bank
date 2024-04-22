@@ -4,7 +4,7 @@ import AuthState from './context/auth/AuthState';
 import AlertState from './context/alert/AlertState';
 import CardState from './context/card/CardState';
 
-const App = (props) => {
+const App = () => {
   const routing = useRoutes(Themeroutes);
 
   return (

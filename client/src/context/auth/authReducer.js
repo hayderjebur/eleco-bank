@@ -11,6 +11,8 @@ import {
   USER_REGISTER_REQUEST,
   USERS_LOADED,
   ADD_CARD_SUCCESS,
+  ADD_CARD_FAIL,
+  CLEAR_DATA,
 } from '../types';
 
 // eslint-disable-next-line import/no-anonymous-default-export
@@ -49,7 +51,13 @@ export default (state, action) => {
     case ADD_CARD_SUCCESS:
       return {
         ...state,
-        ...action.payload,
+        data: action.payload,
+        isLoading: false,
+      };
+    case CLEAR_DATA:
+      return {
+        ...state,
+        data: null,
         isLoading: false,
       };
 
@@ -66,6 +74,13 @@ export default (state, action) => {
         isLoading: false,
         user: null,
         users: null,
+        error: action.payload,
+      };
+
+    case ADD_CARD_FAIL:
+      return {
+        ...state,
+        isLoading: false,
         error: action.payload,
       };
     case CLEAR_ERRORS:

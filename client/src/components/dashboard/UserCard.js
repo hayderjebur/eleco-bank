@@ -1,20 +1,29 @@
-import React, { useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import AuthContext from '../../context/auth/authContext';
 import {
   CardBody,
   Card,
-  UncontrolledDropdown,
+  Dropdown,
   Button,
   DropdownToggle,
   DropdownMenu,
   DropdownItem,
+  UncontrolledDropdown,
 } from 'reactstrap';
 import CreditCards from './ReactCreditCards';
 
 const UserCard = (props) => {
+  const [value, setValue] = useState('');
+
   const authContext = useContext(AuthContext);
 
-  const { user } = authContext;
+  const { user, addSignature } = authContext;
+
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    addSignature(value, props.userCard._id);
+  };
+
   return (
     <Card>
       <CardBody>
@@ -28,12 +37,45 @@ const UserCard = (props) => {
       </CardBody>
       {user.isAdmin ? (
         <UncontrolledDropdown group>
-          <Button color='primary'>Choose Algorithm</Button>
-          <DropdownToggle caret color='primary' />
+          <Button onClick={onSubmit} color={value ? 'success' : 'primary'}>
+            {value ? (
+              <>
+                Submit<span style={{ fontWeight: 'bold' }}> {value} </span>
+                algorithm
+              </>
+            ) : (
+              'Choose Algorithm'
+            )}
+          </Button>
+          <DropdownToggle caret color={value ? 'success' : 'primary'} />
           <DropdownMenu>
-            <DropdownItem>Foo Action</DropdownItem>
-            <DropdownItem>Bar Action</DropdownItem>
-            <DropdownItem>Quo Action</DropdownItem>
+            <DropdownItem
+              onClick={function handleChange(e) {
+                setValue(e.target.value);
+              }}
+              name='Edward'
+              value='Edward'
+            >
+              Edward Curve
+            </DropdownItem>
+            <DropdownItem
+              onClick={function handleChange(e) {
+                setValue(e.target.value);
+              }}
+              name='Koblite'
+              value='Koblite'
+            >
+              Koblite Curve
+            </DropdownItem>
+            <DropdownItem
+              onClick={function handleChange(e) {
+                setValue(e.target.value);
+              }}
+              name='xxx'
+              value='xxx'
+            >
+              Quo Action
+            </DropdownItem>
           </DropdownMenu>
         </UncontrolledDropdown>
       ) : null}

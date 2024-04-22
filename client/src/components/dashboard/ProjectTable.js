@@ -17,7 +17,7 @@ const ProjectTables = () => {
     <div>
       <Card>
         <CardBody>
-          <CardTitle tag='h5'>Project Listing</CardTitle>
+          <CardTitle tag='h5'>List of Clients</CardTitle>
 
           <Table className='no-wrap mt-3 align-middle' responsive borderless>
             <thead>
@@ -32,7 +32,7 @@ const ProjectTables = () => {
                   <td>
                     <div className='d-flex align-items-center p-2'>
                       <img
-                        src={imgs[index]}
+                        src={imgs[index] || imgs[0]}
                         className='rounded-circle'
                         alt='avatar'
                         width='45'
