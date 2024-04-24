@@ -61,10 +61,9 @@ app.use('/api/users', userRoutes);
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const parentDir = path.join(__dirname, '..');
-console.log(parentDir);
 
 if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(parentDir, './client/build')));
+  app.use(express.static(path.join(parentDir, '/client/build')));
 
   app.get('*', (req, res) =>
     res.sendFile(path.resolve(parentDir, 'client', 'build', 'index.html'))

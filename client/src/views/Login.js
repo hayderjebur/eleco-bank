@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import {
   Card,
@@ -126,6 +126,10 @@ const Login = () => {
                       </Button>
                     </Form>
                   </CardBody>
+                  <Col className='col-12 py-3'>
+                    You don't have an account?{' '}
+                    <Link to={'/register'}>Register</Link>
+                  </Col>
                 </Card>
               </Col>
             </Row>
