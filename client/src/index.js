@@ -11,9 +11,9 @@ const root = createRoot(rootElement);
 
 root.render(
   <Suspense fallback={<Loader />}>
-    <HashRouter basename='/'>
+    <BrowserRouter basename='/'>
       <App />
-    </HashRouter>
+    </BrowserRouter>
   </Suspense>
 
   // document.getElementById("root")
