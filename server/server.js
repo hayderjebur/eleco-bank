@@ -63,11 +63,13 @@ const __dirname = dirname(__filename);
 const parentDir = path.join(__dirname, '..');
 
 if (process.env.NODE_ENV === 'production') {
+  console.log(' producation fired');
   app.use(express.static(path.join(parentDir, 'client', 'build')));
 }
 
 // Route all requests to the React app's index.html file for client-side routing
 app.get('*', (req, res) => {
+  console.log(' star fired');
   res.sendFile(path.resolve(parentDir, 'client', 'build', 'index.html'));
 });
 
