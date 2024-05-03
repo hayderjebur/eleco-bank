@@ -61,13 +61,14 @@ app.use('/api/users', userRoutes);
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const parentDir = path.join(__dirname, '..');
+console.log('server outside if fired', __dirname);
 
 if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(parentDir, '/client/build')));
+  app.use(express.static(path.join(__dirname, '/client/build')));
 
   app.get('*', (req, res) => {
-    console.log('server get * fired', parentDir);
-    res.sendFile(path.resolve(parentDir, 'client', 'build', 'index.html'));
+    console.log('server inside if fired', __dirname);
+    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
   });
 } else {
   app.get('/', (req, res) => {
