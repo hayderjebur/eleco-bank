@@ -6,6 +6,7 @@ import AuthContext from '../context/auth/authContext';
 import Message from '../layouts/Message';
 
 const RegisterScreen = (props) => {
+  console.log('register page fired');
   const navigate = useNavigate();
 
   const alertContext = useContext(AlertContext);

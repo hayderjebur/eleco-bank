@@ -21,6 +21,7 @@ import AuthContext from '../context/auth/authContext';
 import Message from '../layouts/Message';
 
 const Login = () => {
+  console.log('login page fired');
   const navigate = useNavigate();
   const alertContext = useContext(AlertContext);
   const authContext = useContext(AuthContext);
