@@ -63,7 +63,7 @@ const __dirname = dirname(__filename);
 const parentDir = path.join(__dirname, '..');
 console.log('server outside if fired', parentDir);
 
-if (process.env.NODE_ENV === 'development') {
+if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(parentDir, '/client/build')));
 
   app.get('*', (req, res) => {
