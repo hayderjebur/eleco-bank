@@ -65,9 +65,10 @@ const parentDir = path.join(__dirname, '..');
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(parentDir, '/client/build')));
 
-  app.get('/*', (req, res) =>
-    res.sendFile(path.resolve(parentDir, 'client', 'build', 'index.html'))
-  );
+  app.get('*', (req, res) => {
+    console.log('server get * fired', parentDir);
+    res.sendFile(path.resolve(parentDir, 'client', 'build', 'index.html'));
+  });
 } else {
   app.get('/', (req, res) => {
     res.send('API is running....');
