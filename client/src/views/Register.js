@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Button, Col, Form, FormGroup, Input, Label, Row } from 'reactstrap';
 import AlertContext from '../context/alert/alertContext';
 import AuthContext from '../context/auth/authContext';
@@ -7,7 +7,7 @@ import Message from '../layouts/Message';
 
 const RegisterScreen = (props) => {
   console.log('register page fired');
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const alertContext = useContext(AlertContext);
   const authContext = useContext(AuthContext);
@@ -17,7 +17,8 @@ const RegisterScreen = (props) => {
 
   useEffect(() => {
     if (isAuthenticated) {
-      navigate('/starter');
+      // navigate('/starter');
+      props.history.push('/');
     }
 
     if (error === 'User already exists') {

@@ -2,6 +2,7 @@ import { Outlet } from 'react-router-dom';
 import Sidebar from './Sidebar';
 import Header from './Header';
 import { Container } from 'reactstrap';
+import Starter from '../views/Starter';
 
 const FullLayout = () => {
   return (
@@ -17,7 +18,7 @@ const FullLayout = () => {
         <div className='contentArea'>
           {/********Middle Content**********/}
           <Container className='p-4 wrapper' fluid>
-            <Outlet />
+            <Starter />
           </Container>
         </div>
       </div>

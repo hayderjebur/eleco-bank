@@ -67,10 +67,7 @@ if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(parentDir, '/client/build')));
 
   app.get('*', (req, res) => {
-    const x = res.sendFile(
-      path.resolve(parentDir, 'client', 'build', 'index.html')
-    );
-    console.log('server inside fired', x);
+    res.sendFile(path.resolve(parentDir, 'client', 'build', 'index.html'));
   });
 } else {
   app.get('/', (req, res) => {

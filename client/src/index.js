@@ -1,20 +1,21 @@
 import React, { Suspense } from 'react';
 // import ReactDOM from "react-dom";
-import { createRoot } from 'react-dom/client';
+import ReactDOM from 'react-dom';
 import './assets/scss/style.scss';
 import App from './App';
-import { BrowserRouter, HashRouter } from 'react-router-dom';
+// import { BrowserRouter, HashRouter } from 'react-router-dom';
 import Loader from './layouts/loader/Loader';
 
-const rootElement = document.getElementById('root');
-const root = createRoot(rootElement);
+// root.render(
+//   <Suspense fallback={<Loader />}>
+//     {/* <BrowserRouter basename='/'> */}
+//     <App />
+//     {/* </BrowserRouter> */}
+//   </Suspense>
 
-root.render(
+ReactDOM.render(
   <Suspense fallback={<Loader />}>
-    <BrowserRouter basename='/'>
-      <App />
-    </BrowserRouter>
-  </Suspense>
-
-  // document.getElementById("root")
+    <App />{' '}
+  </Suspense>,
+  document.getElementById('root')
 );

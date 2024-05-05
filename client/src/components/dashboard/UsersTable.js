@@ -10,7 +10,7 @@ import { Link } from 'react-router-dom';
 
 const imgs = [user1, user2, user3, user4, user5];
 
-const ProjectTables = () => {
+const UsersTables = () => {
   const authContext = useContext(AuthContext);
   const { users } = authContext;
   return (
@@ -60,4 +60,4 @@ const ProjectTables = () => {
   );
 };
 
-export default ProjectTables;
+export default UsersTables;

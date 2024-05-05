@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import AuthContext from '../context/auth/authContext';
 import { Col, Row } from 'reactstrap';
-import ProjectTables from '../components/dashboard/ProjectTable';
+import UsersTables from '../components/dashboard/UsersTable';
 import UserCard from '../components/dashboard/UserCard';
 import PaymentForm from '../components/dashboard/PaymentForm';
 import AlertContext from '../context/alert/alertContext';
@@ -63,7 +63,7 @@ const Starter = () => {
       {user?.isAdmin ? (
         <Row>
           <Col lg='12'>
-            <ProjectTables />
+            <UsersTables />
           </Col>
         </Row>
       ) : null}

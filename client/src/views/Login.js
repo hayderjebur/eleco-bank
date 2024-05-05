@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import {
   Card,
@@ -20,9 +20,9 @@ import AlertContext from '../context/alert/alertContext';
 import AuthContext from '../context/auth/authContext';
 import Message from '../layouts/Message';
 
-const Login = () => {
+const Login = (props) => {
   console.log('login page fired');
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const alertContext = useContext(AlertContext);
   const authContext = useContext(AuthContext);
 
@@ -31,7 +31,7 @@ const Login = () => {
 
   useEffect(() => {
     if (isAuthenticated) {
-      navigate('/starter');
+      props.history.push('/');
     }
     if (error === 'Invalid Credentials') {
       setAlert(error, 'danger');

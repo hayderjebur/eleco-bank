@@ -108,7 +108,7 @@ const createCard = asyncHandler(async (req, res) => {
       expiry,
       cvc,
     };
-    throw Error('error');
+    // throw Error('error');
     // Hash the card data
     const hash = crypto
       .createHash('sha256')
