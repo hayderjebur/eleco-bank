@@ -22,7 +22,6 @@ import Message from '../layouts/Message';
 
 const Login = (props) => {
   console.log('login page fired');
-  // const navigate = useNavigate();
   const alertContext = useContext(AlertContext);
   const authContext = useContext(AuthContext);
 

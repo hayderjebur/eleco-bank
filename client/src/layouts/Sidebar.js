@@ -7,7 +7,7 @@ import Logo from './Logo';
 const navigation = [
   {
     title: 'Dashboard',
-    href: '/starter',
+    href: '/',
     icon: 'bi bi-speedometer2',
   },
 ];

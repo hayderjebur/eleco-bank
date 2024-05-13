@@ -119,7 +119,7 @@ export default class PaymentForm extends React.Component {
                     maxLength={16}
                     placeholder='Card cardNumber'
                     // pattern='[\d| ]{16,22}'
-                    required
+                    // required
                     onChange={this.handleInputChange}
                     onFocus={this.handleInputFocus}
                     value={this.state.cardNumber}
@@ -133,7 +133,7 @@ export default class PaymentForm extends React.Component {
                     maxLength={3}
                     placeholder='CVC'
                     pattern='\d{3,4}'
-                    required
+                    // required
                     onChange={this.handleInputChange}
                     onFocus={this.handleInputFocus}
                     value={this.state.cvc}
@@ -147,7 +147,7 @@ export default class PaymentForm extends React.Component {
                     maxLength={5}
                     placeholder='Valid Thru'
                     pattern='\d\d/\d\d'
-                    required
+                    // required
                     type='tel'
                     onChange={this.handleInputChange}
                     onFocus={this.handleInputFocus}

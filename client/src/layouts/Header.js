@@ -77,7 +77,7 @@ const Header = () => {
       <Collapse navbar isOpen={isOpen}>
         <Nav className='me-auto' navbar>
           <NavItem>
-            <Link to='/starter' className='nav-link'>
+            <Link to='/' className='nav-link'>
               Eleco-Bank
             </Link>
           </NavItem>

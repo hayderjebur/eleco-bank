@@ -6,7 +6,6 @@ const PrivateRoute = ({ component: Component, children, ...rest }) => {
   const AuthContext = useContext(authContext);
 
   const { isAuthenticated, loading } = AuthContext;
-
   return (
     <Route
       {...rest}
@@ -14,7 +13,7 @@ const PrivateRoute = ({ component: Component, children, ...rest }) => {
         !isAuthenticated && !loading ? (
           <Redirect to='/login' />
         ) : (
-          <Component {...props} />
+          <Component {...props} {...rest} />
         )
       }
     />

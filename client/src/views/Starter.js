@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import AuthContext from '../context/auth/authContext';
 import { Col, Row } from 'reactstrap';
 import UsersTables from '../components/dashboard/UsersTable';
@@ -6,7 +6,7 @@ import UserCard from '../components/dashboard/UserCard';
 import PaymentForm from '../components/dashboard/PaymentForm';
 import AlertContext from '../context/alert/alertContext';
 
-const Starter = () => {
+const Starter = (props) => {
   const authContext = useContext(AuthContext);
   const alertContext = useContext(AlertContext);
 
@@ -20,7 +20,14 @@ const Starter = () => {
     data,
     clearErrors,
     clearData,
+    isAuthenticated,
   } = authContext;
+
+  // useEffect(() => {
+  //   if (!isAuthenticated) {
+  //     props.history.push('/login');
+  //   }
+  // }, [isAuthenticated, props.history]);
 
   return (
     <div>
@@ -46,15 +53,7 @@ const Starter = () => {
         {user?.cards?.map((card) => {
           return (
             <Col sm='6' lg='6' key={card._id}>
-              <UserCard
-                userCard={card}
-                userName={user.name}
-                bg='bg-light-success text-success'
-                title='Profit'
-                subtitle='Yearly Earning'
-                earning='$21k'
-                icon='bi bi-wallet'
-              />
+              <UserCard userCard={card} userName={user.name} />
             </Col>
           );
         })}

@@ -23,16 +23,16 @@ const UserCard = (props) => {
     e.preventDefault();
     addSignature(value, props.userCard._id);
   };
-
+  console.log('xxx user card', props.userCard);
   return (
     <Card>
       <CardBody>
         <CreditCards
-          cvc={props.userCard.cvc}
-          expiry={props.userCard.expiry}
-          focused={props.userCard.focus}
-          name={props.userName}
-          number={props.userCard.cardNumber}
+          cvc={232}
+          expiry={23 / 34}
+          focused={props.userCard?.focus}
+          name={props?.userName}
+          number={2324}
         />
       </CardBody>
       {user.isAdmin ? (
