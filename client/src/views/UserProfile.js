@@ -10,7 +10,7 @@ const UserProfile = (props) => {
   const authContext = useContext(AuthContext);
   const { id } = useParams();
 
-  const { users, isAuthenticated } = authContext;
+  const { users, isAuthenticated, user } = authContext;
   const profile = users?.filter((user) => user._id === id);
   const userProfile = profile?.length > 0 ? profile[0] : [];
 
@@ -22,12 +22,12 @@ const UserProfile = (props) => {
 
   return (
     <main>
-      <Header />
-      <div className='pageWrapper d-lg-flex'>
-        {/********Sidebar**********/}
-        <aside className='sidebarArea shadow' id='sidebarArea'>
-          <Sidebar />
-        </aside>
+      <div className='pageWrapper d-lg-flex mx-5'>
+        {!user?.isAdmin ? (
+          <aside className='sidebarArea shadow' id='sidebarArea'>
+            <Sidebar />
+          </aside>
+        ) : null}
         <div className='text-center p-4'>
           {userProfile?.cards?.length > 0 ? (
             <h3>{userProfile.name} Cards</h3>

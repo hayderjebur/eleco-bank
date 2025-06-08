@@ -2,12 +2,26 @@ import React, { useContext } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Button, Nav, NavItem } from 'reactstrap';
 import AuthContext from '../context/auth/authContext';
-import Logo from './Logo';
 
 const navigation = [
   {
-    title: 'Dashboard',
+    title: 'Customer Info',
     href: '/',
+    icon: 'bi bi-file-person',
+  },
+  {
+    title: 'Transation History',
+    href: '/',
+    icon: 'bi bi-graph-up-arrow',
+  },
+  {
+    title: 'Money transfar',
+    href: '/',
+    icon: 'bi bi-coin',
+  },
+  {
+    title: 'Add Credit Card',
+    href: '/add-card',
     icon: 'bi bi-speedometer2',
   },
 ];
@@ -15,16 +29,16 @@ const navigation = [
 const Sidebar = () => {
   const authContext = useContext(AuthContext);
 
-  const { logout } = authContext;
+  const { logout, user } = authContext;
   const showMobilemenu = () => {
     document.getElementById('sidebarArea').classList.toggle('showSidebar');
   };
   let location = useLocation();
+  console.log(user);
 
   return (
-    <div className='p-3'>
+    <div className='p-3' style={{ height: 'auto' }}>
       <div className='d-flex align-items-center justify-content-center'>
-        <Logo />
         <span className='ms-auto d-lg-none'>
           <Button
             close

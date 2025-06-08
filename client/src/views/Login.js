@@ -15,13 +15,12 @@ import {
   CardImg,
   Spinner,
 } from 'reactstrap';
-import bg1 from '../assets/images/bg/bg1.jpg';
+
 import AlertContext from '../context/alert/alertContext';
 import AuthContext from '../context/auth/authContext';
 import Message from '../layouts/Message';
 
 const Login = (props) => {
-  console.log('login page fired');
   const alertContext = useContext(AlertContext);
   const authContext = useContext(AuthContext);
 
@@ -64,13 +63,13 @@ const Login = (props) => {
     <Row className='container'>
       <Col sm='12' lg='6' className='offset-md-4'>
         <Card>
-          <CardImg
+          {/* <CardImg
             style={{
               height: '18rem',
             }}
             alt='Card image cap'
             src={bg1}
-          />
+          /> */}
           <CardBody className='p-4'>
             <Row>
               <Col>
@@ -121,19 +120,84 @@ const Login = (props) => {
                             <span> Loading</span>
                           </>
                         ) : (
-                          'Submit'
+                          'Login'
                         )}
                       </Button>
                     </Form>
                   </CardBody>
-                  <Col className='col-12 py-3'>
+                  <Col className='col-12 p-4'>
                     You don't have an account?{' '}
                     <Link to={'/register'}>Register</Link>
                   </Col>
                 </Card>
               </Col>
             </Row>
+            <div className='d-flex justify-content-evenly align-items-start '>
+              <Button
+                color='primary'
+                className='mt-2'
+                disabled={isLoading}
+                onClick={onSubmit}
+                outline
+              >
+                Branches
+              </Button>
+              <Button
+                color='primary'
+                className='mt-2'
+                disabled={isLoading}
+                onClick={onSubmit}
+                outline
+              >
+                About Us
+              </Button>
+              <Button
+                color='primary'
+                className='mt-2'
+                disabled={isLoading}
+                onClick={onSubmit}
+                // size='lg'
+                outline
+              >
+                Contact Us
+              </Button>
+            </div>
           </CardBody>
+          {/* <div className='d-flex justify-content-evenly align-items-start pb-4'>
+            <Button
+              color='primary'
+              className='mt-2'
+              disabled={isLoading}
+              onClick={onSubmit}
+              // size='lg'
+              outline
+            >
+              Branches
+            </Button>
+            <Button
+              color='primary'
+              className='mt-2'
+              disabled={isLoading}
+              onClick={onSubmit}
+              // size='lg'
+              outline
+            >
+              About Us
+            </Button>
+            <Button
+              color='primary'
+              className='mt-2'
+              disabled={isLoading}
+              onClick={onSubmit}
+              // size='lg'
+              outline
+            >
+              Contact Us
+            </Button>
+          </div> */}
+          <p className='text-center'>
+            @2025 Secure Bank System. All rights reserved.
+          </p>
         </Card>
       </Col>
     </Row>

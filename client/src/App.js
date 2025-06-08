@@ -5,22 +5,27 @@ import AuthState from './context/auth/AuthState';
 import AlertState from './context/alert/AlertState';
 import CardState from './context/card/CardState';
 import PrivateRoute from './routes/PrivateRoute';
-import FullLayout from './layouts/FullLayout';
+// import FullLayout from './layouts/FullLayout';
 import Register from './views/Register';
 import Login from './views/Login';
-import Starter from './views/Starter';
+
 import UserProfile from './views/UserProfile';
+import Header from './layouts/Header';
+import HeaderV2 from './layouts/HeaderV2';
+import AddCard from './layouts/AddCard';
+import ListCards from './views/ListCards';
 
 const App = () => {
-  // const routing = useRoutes(Themeroutes);
-
   return (
     <AuthState>
       <CardState>
         <AlertState>
           <Router>
+            <HeaderV2 />
+            {/* <Header /> */}
             <Switch>
-              <PrivateRoute exact path='/' component={FullLayout} />
+              <PrivateRoute exact path='/' component={ListCards} />
+              <PrivateRoute exact path='/add-card' component={AddCard} />
               <PrivateRoute
                 exact
                 path='/userProfile/:id'

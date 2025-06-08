@@ -98,7 +98,7 @@ export default class PaymentForm extends React.Component {
                 number={this.state.cardNumber}
               />
             </Col>
-            <Col lg='7'>
+            <Col lg='6' className='mx-5'>
               <Form onSubmit={this.onSubmit}>
                 <FormGroup className='my-2' controlid='name'>
                   <Label>Name</Label>

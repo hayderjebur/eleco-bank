@@ -33,9 +33,10 @@ const RegisterScreen = (props) => {
     email: '',
     password: '',
     confirmPassword: '',
+    dateOfBirth: 'DD/MM/YY',
   });
 
-  const { name, email, password, confirmPassword } = user;
+  const { name, email, password, confirmPassword, dateOfBirth } = user;
 
   const onChange = (e) => setUser({ ...user, [e.target.name]: e.target.value });
 
@@ -111,6 +112,17 @@ const RegisterScreen = (props) => {
                 placeholder='password placeholder'
                 type='password'
                 value={confirmPassword}
+                onChange={onChange}
+              />
+            </FormGroup>
+            <FormGroup className='my-2' controlid='confirmPassword'>
+              <Label>Date of Birth</Label>
+              <Input
+                id='dateOfBirth'
+                name='dateOfBirth'
+                placeholder='password placeholder'
+                type='text'
+                value={dateOfBirth}
                 onChange={onChange}
               />
             </FormGroup>

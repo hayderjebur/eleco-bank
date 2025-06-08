@@ -15,6 +15,8 @@ import {
 } from 'reactstrap';
 import { ReactComponent as LogoWhite } from '../assets/images/logos/xtremelogowhite.svg';
 import user1 from '../assets/images/users/user1.jpg';
+import leftlogo from '../assets/images/logos/must.png';
+import rightLogo from '../assets/images/logos/al.png';
 
 const Header = () => {
   const [isOpen, setIsOpen] = React.useState(false);
@@ -46,11 +48,9 @@ const Header = () => {
   };
 
   return (
-    <Navbar color='primary' dark expand='md'>
+    <Navbar color='secondery' dark expand='md'>
       <div className='d-flex align-items-center'>
-        <NavbarBrand href='/' className='d-lg-none'>
-          <LogoWhite />
-        </NavbarBrand>
+        <NavbarBrand href='/' className='d-lg-none'></NavbarBrand>
         <Button
           color='primary'
           className='d-lg-none'
@@ -78,10 +78,11 @@ const Header = () => {
         <Nav className='me-auto' navbar>
           <NavItem>
             <Link to='/' className='nav-link'>
-              Eleco-Bank
+              <img src={leftlogo} width={100} height={100} />
             </Link>
           </NavItem>
         </Nav>
+
         {isAuthenticated ? (
           <h6 style={{ color: '#ffffff8c' }}> Hello {user && user.name}</h6>
         ) : null}
@@ -103,6 +104,12 @@ const Header = () => {
             <DropdownItem onClick={onLogout}>Logout</DropdownItem>
           </DropdownMenu>
         </Dropdown>
+
+        <NavItem>
+          <Link to='/' className='nav-link'>
+            <img src={rightLogo} width={100} height={100} />
+          </Link>
+        </NavItem>
       </Collapse>
     </Navbar>
   );

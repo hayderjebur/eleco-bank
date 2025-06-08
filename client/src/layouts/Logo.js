@@ -1,4 +1,4 @@
-import logo from '../assets/images/logos/3.png';
+import logo from '../assets/images/logos/must.jpeg';
 import { Link } from 'react-router-dom';
 
 const Logo = () => {

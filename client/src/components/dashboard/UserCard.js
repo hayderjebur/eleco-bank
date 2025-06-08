@@ -23,7 +23,7 @@ const UserCard = (props) => {
     e.preventDefault();
     addSignature(value, props.userCard._id);
   };
-  console.log('xxx user card', props.userCard);
+
   return (
     <Card>
       <CardBody>

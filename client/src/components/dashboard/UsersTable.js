@@ -17,39 +17,39 @@ const UsersTables = () => {
     <div>
       <Card>
         <CardBody>
-          <CardTitle tag='h5'>List of Clients</CardTitle>
+          <CardTitle tag='h5' className='text-center'>
+            Admin Page
+          </CardTitle>
+          <CardTitle tag='h5' className='text-center'>
+            List of Clients
+          </CardTitle>
 
           <Table className='no-wrap mt-3 align-middle' responsive borderless>
             <thead>
               <tr>
                 <th>Clients</th>
                 <th>Number of Cards</th>
+                <th>Email</th>
               </tr>
             </thead>
             <tbody>
               {users?.map((user, index) => (
                 <tr key={index} className='border-top'>
                   <td>
-                    <div className='d-flex align-items-center p-2'>
-                      <img
-                        src={imgs[index] || imgs[0]}
-                        className='rounded-circle'
-                        alt='avatar'
-                        width='45'
-                        height='45'
-                      />
+                    <div className=' p-2'>
                       <Link
                         className='text-primary nav-link'
                         to={`/userProfile/${user._id}`}
                       >
-                        <div className='ms-3'>
-                          <h6 className='mb-0'>{user.name}</h6>
-                          <span className='text-muted'>{user.email}</span>
-                        </div>
+                        <h6 className='mb-0'>{user.name}</h6>
                       </Link>
                     </div>
                   </td>
                   <td>{user.cards.length}</td>
+                  {/* <td>{user}</td> */}
+                  <td>
+                    <span className='text-muted'>{user.email}</span>
+                  </td>
                 </tr>
               ))}
             </tbody>

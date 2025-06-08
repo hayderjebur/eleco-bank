@@ -6,7 +6,9 @@ import Loader from './layouts/loader/Loader';
 
 ReactDOM.render(
   <Suspense fallback={<Loader />}>
-    <App />{' '}
+    <div style={{ margin: '2rem' }}>
+      <App />{' '}
+    </div>
   </Suspense>,
   document.getElementById('root')
 );
