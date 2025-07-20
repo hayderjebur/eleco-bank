@@ -1,13 +1,26 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
 
+const encryptNumberSchema = mongoose.Schema(
+  {
+    message: { type: String, required: false },
+    C1: { type: [String], required: true },
+    C2: { type: [String], required: true },
+    offset: { type: String, required: true },
+    b64_len: { type: Number, required: true },
+    encoded_backup: { type: String, required: true },
+    seed: { type: Number, required: true },
+  },
+  {
+    timestamps: true,
+  }
+);
+
 const cardSchema = mongoose.Schema(
   {
-    // cardNumber: { type: String, required: true },
-    // expiry: { type: String, required: true },
-    // cvc: { type: String, required: true },
-    hashedData: { type: String, required: true },
-    signature: { type: String },
+    cardNumber: encryptNumberSchema,
+    expiry: encryptNumberSchema,
+    cvc: encryptNumberSchema,
     user: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
@@ -33,14 +46,7 @@ const userSchema = mongoose.Schema(
       type: String,
       required: true,
     },
-    publicKey: {
-      type: String,
-      // required: true,
-    },
-    privateKey: {
-      type: String,
-      // required: true,
-    },
+
     isAdmin: {
       type: Boolean,
       required: true,

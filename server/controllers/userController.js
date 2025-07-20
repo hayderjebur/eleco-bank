@@ -3,11 +3,8 @@ import asyncHandler from 'express-async-handler';
 import generateToken from '../utils/generateToken.js';
 import User from '../models/userModel.js';
 
-import elliptic from 'elliptic';
-import crypto from 'crypto';
-const EC = elliptic.ec;
-const secp256k1 = new EC('secp256k1');
-const ed25519 = new EC('ed25519');
+import encryptCard from '../utils/encryptNumber.js';
+import decryptCard from '../utils/decryptNumber.js';
 
 // @desc    Auth user & get token
 // @route   POST /api/users/login
@@ -25,11 +22,62 @@ const authUser = asyncHandler(async (req, res) => {
       email: user.email,
       isAdmin: user.isAdmin,
       token: generateToken(user._id),
-      publicKey: user.publicKey,
     });
   } else {
     res.status(401);
     throw new Error('Invalid email or password');
+  }
+});
+
+// @desc    Create new Card
+// @route   POST /api/users/:id/card
+// @access  Private
+const createCard = asyncHandler(async (req, res) => {
+  const { cardNumber, expiry, cvc } = req.body;
+  const user = await User.findById(req.params.id);
+
+  const encryptedObject = encryptCard(cardNumber, expiry, cvc);
+
+  if (user) {
+    const encryptCardNumber = {
+      C1: encryptedObject[0].C1,
+      C2: encryptedObject[0].C2,
+      offset: encryptedObject[0].offset,
+      b64_len: encryptedObject[0].b64_len,
+      encoded_backup: encryptedObject[0].encoded_backup,
+      seed: encryptedObject[0].seed,
+    };
+    const encryptExpiryNumber = {
+      C1: encryptedObject[1].C1,
+      C2: encryptedObject[1].C2,
+      offset: encryptedObject[1].offset,
+      b64_len: encryptedObject[1].b64_len,
+      encoded_backup: encryptedObject[1].encoded_backup,
+      seed: encryptedObject[1].seed,
+    };
+    const encryptCvcNumber = {
+      C1: encryptedObject[2].C1,
+      C2: encryptedObject[2].C2,
+      offset: encryptedObject[2].offset,
+      b64_len: encryptedObject[2].b64_len,
+      encoded_backup: encryptedObject[2].encoded_backup,
+      seed: encryptedObject[2].seed,
+    };
+
+    const card = {
+      user: req.user._id,
+      cardNumber: encryptCardNumber,
+      expiry: encryptExpiryNumber,
+      cvc: encryptCvcNumber,
+    };
+
+    user.cards.push(card);
+
+    await user.save();
+    res.status(201).json({ message: 'Card added successfully' });
+  } else {
+    res.status(404);
+    throw new Error('User not found');
   }
 });
 
@@ -45,14 +93,11 @@ const registerUser = asyncHandler(async (req, res) => {
     res.status(400);
     throw new Error('User already exists');
   }
-  const key = secp256k1.genKeyPair();
 
   const user = await User.create({
     name,
     email,
     password,
-    publicKey: key.getPublic('hex'),
-    privateKey: key.getPrivate(),
   });
 
   if (user) {
@@ -62,7 +107,6 @@ const registerUser = asyncHandler(async (req, res) => {
       email: user.email,
       isAdmin: user.isAdmin,
       token: generateToken(user._id),
-      publicKey: user.publicKey,
     });
   } else {
     res.status(400);
@@ -81,11 +125,25 @@ const getUsers = asyncHandler(async (req, res) => {
 // @desc    Get user by ID
 // @route   GET /api/users/:id
 const getUserById = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.params.id).select(
-    '-password -privateKey -cards.signature'
-  );
+  const user = await User.findById(req.params.id).select('-password');
 
   if (user) {
+    if (user.cards) {
+      // console.log(user.cards[0].cardNumber.C1);
+      for (let card of user.cards) {
+        const cardNum = {
+          C1: card.cardNumber.C1,
+          C2: card.cardNumber.C2,
+          offset: card.cardNumber.offset,
+          b64_len: card.cardNumber.b64_len,
+          encoded_backup: card.cardNumber.encoded_backup,
+          seed: card.cardNumber.seed,
+        };
+        const decryptNum = decryptCard(cardNum);
+        console.log(decryptNum);
+      }
+    }
+
     res.json(user);
   } else {
     res.status(404);
@@ -93,99 +151,4 @@ const getUserById = asyncHandler(async (req, res) => {
   }
 });
 
-// @desc    Create new Card
-// @route   POST /api/users/:id/card
-// @access  Private
-const createCard = asyncHandler(async (req, res) => {
-  const { cardNumber, expiry, cvc, ellipticType } = req.body;
-
-  // publicKey: key.getPublic('hex')
-  // const userKeyPair = ec.genKeyPair();
-
-  const user = await User.findById(req.params.id);
-  if (user) {
-    const cardData = {
-      cardNumber,
-      expiry,
-      cvc,
-    };
-    // throw Error('error');
-    // Hash the card data
-    const hash = crypto
-      .createHash('sha256')
-      .update(JSON.stringify(cardData))
-      .digest('hex');
-
-    const card = {
-      hashedData: hash,
-      user: req.user._id,
-    };
-
-    user.cards.push(card);
-
-    await user.save();
-    res.status(201).json({ message: 'Card added successfully' });
-  } else {
-    res.status(404);
-    throw new Error('User not found');
-  }
-});
-// @desc    Create Signture
-// @route   POST /api/users/:userId/cards/:cardId
-// @access  Private
-
-const createSignature = asyncHandler(async (req, res) => {
-  const { ellipticType } = req.body;
-  const cardId = mongoose.Types.ObjectId(req.params.cardId);
-
-  try {
-    const user = await User.findById(req.params.userId);
-    if (!user) {
-      res.status(404);
-      throw new Error('User not found');
-    }
-
-    const foundCard = user.cards.find((card) => card._id.equals(cardId));
-    if (!foundCard) {
-      res.status(404);
-      throw new Error('Card not found');
-    }
-    if (foundCard.signature) {
-      res.status(404);
-      throw new Error('The card already has a signature ');
-    }
-
-    let signature;
-    if (ellipticType === 'Edward') {
-      signature = ed25519
-        .keyFromPrivate(user.privateKey)
-        .sign(foundCard.hashedData);
-    } else if (ellipticType === 'Koblite') {
-      signature = secp256k1
-        .keyFromPrivate(user.privateKey)
-        .sign(foundCard.hashedData);
-    } else {
-      res.status(400);
-      throw new Error('Unsupported elliptic curve type');
-    }
-
-    foundCard.signature = signature?.toDER('hex');
-    await user.save();
-
-    res
-      .status(201)
-      .json({ message: 'Signature added successfully!', foundCard });
-  } catch (error) {
-    console.error('Error creating signature:', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
-
-export {
-  authUser,
-  registerUser,
-  getUsers,
-  getUserById,
-  createCard,
-  createSignature,
-};
+export { authUser, registerUser, getUsers, getUserById, createCard };

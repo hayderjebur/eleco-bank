@@ -13,23 +13,7 @@ const ListCards = (props) => {
   console.log('authContext', authContext);
 
   const { setAlert, alerts } = alertContext;
-  const {
-    addCard,
-    error,
-    user,
-    loadUser,
-    userId,
-    data,
-    clearErrors,
-    clearData,
-    isAuthenticated,
-  } = authContext;
-
-  // useEffect(() => {
-  //   if (!isAuthenticated) {
-  //     props.history.push('/login');
-  //   }
-  // }, [isAuthenticated, props.history]);
+  const { user } = authContext;
 
   return (
     <>
