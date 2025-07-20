@@ -1,5 +1,4 @@
 // ======================== Edwards Curve Class ========================
-
 class EdwardsCurve {
   constructor(p, d) {
     this.p = BigInt(p);
@@ -167,6 +166,7 @@ export function encrypt(message, seed = 99999) {
 }
 
 export function decrypt(C1, C2, offset, b64_len, encoded_backup, seed) {
+  // console.log('c11', C1);
   const [, k_prime] = generatePrivateKeyWithLogistic(p, seed);
   const kC1 = curve.scalarMult(k_prime, C1);
   const kC1_neg = [kC1[0], (p - kC1[1]) % p];

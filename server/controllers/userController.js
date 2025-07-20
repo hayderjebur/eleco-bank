@@ -122,29 +122,63 @@ const getUsers = asyncHandler(async (req, res) => {
   res.json(users);
 });
 
+function decryptAllCards(cards = []) {
+  return cards.map((card) => {
+    // Build cardNum object for decryptCard
+    const cardNumber = {
+      C1: card.cardNumber.C1,
+      C2: card.cardNumber.C2,
+      offset: card.cardNumber.offset,
+      b64_len: card.cardNumber.b64_len,
+      encoded_backup: card.cardNumber.encoded_backup,
+      seed: card.cardNumber.seed,
+    };
+    const expiryNumber = {
+      C1: card.expiry.C1,
+      C2: card.expiry.C2,
+      offset: card.expiry.offset,
+      b64_len: card.expiry.b64_len,
+      encoded_backup: card.expiry.encoded_backup,
+      seed: card.expiry.seed,
+    };
+    const cvcNumber = {
+      C1: card.cvc.C1,
+      C2: card.cvc.C2,
+      offset: card.cvc.offset,
+      b64_len: card.cvc.b64_len,
+      encoded_backup: card.cvc.encoded_backup,
+      seed: card.cvc.seed,
+    };
+
+    try {
+      const decryptedNumber = decryptCard(cardNumber);
+      const decrypteExpirydNumber = decryptCard(expiryNumber);
+      const decryptedCvcNumber = decryptCard(cvcNumber);
+      return {
+        ...card,
+        cardNumber: decryptedNumber,
+        expiry: decrypteExpirydNumber,
+        cvc: decryptedCvcNumber,
+      };
+    } catch (err) {
+      console.error('Failed to decrypt card:', err);
+      return { ...card, decryptedCardNumber: '<Decryption failed>' };
+    }
+  });
+}
+
 // @desc    Get user by ID
 // @route   GET /api/users/:id
 const getUserById = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.params.id).select('-password');
+  const user = await User.findById(req.params.id).select('-password').lean();
+  // console.log(user);
 
   if (user) {
+    let result;
     if (user.cards) {
-      // console.log(user.cards[0].cardNumber.C1);
-      for (let card of user.cards) {
-        const cardNum = {
-          C1: card.cardNumber.C1,
-          C2: card.cardNumber.C2,
-          offset: card.cardNumber.offset,
-          b64_len: card.cardNumber.b64_len,
-          encoded_backup: card.cardNumber.encoded_backup,
-          seed: card.cardNumber.seed,
-        };
-        const decryptNum = decryptCard(cardNum);
-        console.log(decryptNum);
-      }
+      result = decryptAllCards(user.cards);
     }
-
-    res.json(user);
+    res.json(result);
   } else {
     res.status(404);
     throw new Error('User not found');
