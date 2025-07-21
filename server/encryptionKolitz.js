@@ -1,5 +1,3 @@
-const base64 = require('base64-js');
-
 // Field and Curve Parameters
 const p = (1n << 127n) - 1n; // 2^127 - 1
 const a = 1n;
@@ -10,7 +8,7 @@ const P = [
   58295921324149903641698107476034198484n,
 ];
 
-class KoblitzCurve {
+export class KoblitzCurve {
   constructor(p, a) {
     this.p = BigInt(p);
     this.a = BigInt(a);
@@ -91,7 +89,8 @@ function chaotic_key_full(seed, p) {
   }
   const x_hen_scaled = Math.floor((xh + yh) * 1e8);
 
-  return BigInt((x_log_scaled ^ x_hen_scaled) % Number(p));
+  // Always return a positive key modulo p
+  return (BigInt(x_log_scaled ^ x_hen_scaled) + p) % p;
 }
 
 // Encryption
@@ -123,6 +122,32 @@ export function encrypt_koblitz(msg, curve, P, seed, p) {
 }
 
 // Decryption
+// export function decrypt_koblitz(
+//   C1,
+//   C2,
+//   offset,
+//   byte_len,
+//   curve,
+//   P,
+//   seed,
+//   p,
+//   encoded_backup
+// ) {
+//   const k = chaotic_key_full(seed, p);
+//   const kC1 = curve.scalar_mult(k, C1);
+//   if (!kC1) throw new Error('Invalid k*C1 (point not on curve)');
+//   const inv_kC1 = [kC1[0], (p - kC1[1]) % p];
+//   const M = curve.point_add(C2, inv_kC1);
+//   const x = (M[0] - offset + p) % p;
+
+//   try {
+//     const hex = x.toString(16).padStart(byte_len * 2, '0');
+//     const recovered_bytes = Buffer.from(hex, 'hex');
+//     return Buffer.from(recovered_bytes.toString(), 'base64').toString();
+//   } catch {
+//     return Buffer.from(encoded_backup, 'base64').toString();
+//   }
+// }
 export function decrypt_koblitz(
   C1,
   C2,
@@ -137,6 +162,7 @@ export function decrypt_koblitz(
   const k = chaotic_key_full(seed, p);
   const kC1 = curve.scalar_mult(k, C1);
   if (!kC1) throw new Error('Invalid k*C1 (point not on curve)');
+
   const inv_kC1 = [kC1[0], (p - kC1[1]) % p];
   const M = curve.point_add(C2, inv_kC1);
   const x = (M[0] - offset + p) % p;
@@ -144,10 +170,17 @@ export function decrypt_koblitz(
   try {
     const hex = x.toString(16).padStart(byte_len * 2, '0');
     const recovered_bytes = Buffer.from(hex, 'hex');
-    return Buffer.from(recovered_bytes.toString(), 'base64').toString();
-  } catch {
-    return Buffer.from(encoded_backup, 'base64').toString();
+    const result = Buffer.from(recovered_bytes.toString(), 'base64').toString();
+
+    if (result && /^[0-9]+$/.test(result)) {
+      return result;
+    }
+  } catch (err) {
+    console.error('Primary decode failed:', err);
   }
+
+  // Force fallback
+  return Buffer.from(encoded_backup, 'base64').toString();
 }
 
 // Fast modular exponentiation

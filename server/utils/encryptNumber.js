@@ -1,4 +1,5 @@
-import { encrypt } from '../encryptionEdwardsCurve.js';
+import { encryptEdwards } from '../encryptionEdwardsCurve.js';
+import { encryptKoblitz } from './koblitz.js';
 
 const encryptCard = (cardNumber, expiry, cvc) => {
   if (!cardNumber || !expiry || !cvc) return 'All fields are required';
@@ -6,9 +7,9 @@ const encryptCard = (cardNumber, expiry, cvc) => {
   const expiryString = JSON.stringify(expiry);
   const cvcString = JSON.stringify(cvc);
 
-  const encryptCardNumber = encrypt(cardNumberString);
-  const encryptExpiryNumber = encrypt(expiryString);
-  const encryptCvcNumber = encrypt(cvcString);
+  const encryptCardNumber = encryptEdwards(cardNumberString);
+  const encryptExpiryNumber = encryptKoblitz(expiryString);
+  const encryptCvcNumber = encryptKoblitz(cvcString);
   return [encryptCardNumber, encryptExpiryNumber, encryptCvcNumber];
 };
 

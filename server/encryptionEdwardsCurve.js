@@ -137,7 +137,7 @@ function encodeMessageToPoint(message, p, d) {
 }
 
 // ======================== Encrypt & Decrypt ========================
-export function encrypt(message, seed = 99999) {
+export function encryptEdwards(message, seed = 99999) {
   const [k, k_prime] = generatePrivateKeyWithLogistic(p, seed);
   const Q = curve.scalarMult(k_prime, G);
 

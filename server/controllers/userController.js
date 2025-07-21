@@ -5,6 +5,7 @@ import User from '../models/userModel.js';
 
 import encryptCard from '../utils/encryptNumber.js';
 import decryptCard from '../utils/decryptNumber.js';
+import { encryptKoblitz, decryptKoblitzNumber } from '../utils/koblitz.js';
 
 // @desc    Auth user & get token
 // @route   POST /api/users/login
@@ -51,17 +52,17 @@ const createCard = asyncHandler(async (req, res) => {
       C1: encryptedObject[1].C1,
       C2: encryptedObject[1].C2,
       offset: encryptedObject[1].offset,
-      b64_len: encryptedObject[1].b64_len,
-      encoded_backup: encryptedObject[1].encoded_backup,
-      seed: encryptedObject[1].seed,
+      b64_len: encryptedObject[1].byte_len,
+      encoded_backup: encryptedObject[1].encoded,
+      seed: 99999,
     };
     const encryptCvcNumber = {
       C1: encryptedObject[2].C1,
       C2: encryptedObject[2].C2,
       offset: encryptedObject[2].offset,
-      b64_len: encryptedObject[2].b64_len,
-      encoded_backup: encryptedObject[2].encoded_backup,
-      seed: encryptedObject[2].seed,
+      b64_len: encryptedObject[2].byte_len,
+      encoded_backup: encryptedObject[2].encoded,
+      seed: 99999,
     };
 
     const card = {
@@ -124,7 +125,6 @@ const getUsers = asyncHandler(async (req, res) => {
 
 function decryptAllCards(cards = []) {
   return cards.map((card) => {
-    // Build cardNum object for decryptCard
     const cardNumber = {
       C1: card.cardNumber.C1,
       C2: card.cardNumber.C2,
@@ -133,32 +133,38 @@ function decryptAllCards(cards = []) {
       encoded_backup: card.cardNumber.encoded_backup,
       seed: card.cardNumber.seed,
     };
+    const C1Big = card.expiry.C1.map(BigInt);
+    const C2Big = card.expiry.C2.map(BigInt);
     const expiryNumber = {
-      C1: card.expiry.C1,
-      C2: card.expiry.C2,
-      offset: card.expiry.offset,
-      b64_len: card.expiry.b64_len,
+      C1: C1Big,
+      C2: C2Big,
+      offset: BigInt(card.expiry.offset),
+      byte_len: card.expiry.b64_len,
       encoded_backup: card.expiry.encoded_backup,
-      seed: card.expiry.seed,
+      seed: 99999,
     };
+    const C1BigCvc = card.cvc.C1.map(BigInt);
+    const C2BigCvc = card.cvc.C2.map(BigInt);
     const cvcNumber = {
-      C1: card.cvc.C1,
-      C2: card.cvc.C2,
-      offset: card.cvc.offset,
-      b64_len: card.cvc.b64_len,
+      C1: C1BigCvc,
+      C2: C2BigCvc,
+      offset: BigInt(card.cvc.offset),
+      byte_len: card.cvc.b64_len,
       encoded_backup: card.cvc.encoded_backup,
-      seed: card.cvc.seed,
+      seed: 99999,
     };
 
     try {
+      //Edwards Curve
       const decryptedNumber = decryptCard(cardNumber);
-      const decrypteExpirydNumber = decryptCard(expiryNumber);
-      const decryptedCvcNumber = decryptCard(cvcNumber);
+      // Kolitz Curve
+      const encryptedExpiry = decryptKoblitzNumber(expiryNumber);
+      const encryptedCvc = decryptKoblitzNumber(cvcNumber);
       return {
         ...card,
-        cardNumber: decryptedNumber,
-        expiry: decrypteExpirydNumber,
-        cvc: decryptedCvcNumber,
+        cardNumber: JSON.parse(decryptedNumber),
+        expiry: JSON.parse(encryptedExpiry),
+        cvc: JSON.parse(encryptedCvc),
       };
     } catch (err) {
       console.error('Failed to decrypt card:', err);
