@@ -6,7 +6,10 @@ import Loader from './layouts/loader/Loader';
 
 ReactDOM.render(
   <Suspense fallback={<Loader />}>
-    <div style={{ margin: '2rem' }}>
+    <div
+      style={{ margin: '2rem' }}
+      className='d-flex justify-content-center flex-column align-items-center'
+    >
       <App />{' '}
     </div>
   </Suspense>,

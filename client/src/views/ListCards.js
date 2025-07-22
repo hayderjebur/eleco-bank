@@ -10,10 +10,11 @@ import Sidebar from '../layouts/Sidebar';
 const ListCards = (props) => {
   const authContext = useContext(AuthContext);
   const alertContext = useContext(AlertContext);
-  console.log('authContext', authContext);
+  // console.log('authContext', authContext);
 
   const { setAlert, alerts } = alertContext;
   const { user } = authContext;
+  console.log('user:', user);
 
   return (
     <>
@@ -28,7 +29,7 @@ const ListCards = (props) => {
           </aside>
         ) : null}
 
-        <div style={{ width: '59%' }} className='mx-4'>
+        <div className='mx-4'>
           {!user?.isAdmin && (
             <Row>
               {user?.cards?.length > 0 ? (
@@ -37,6 +38,7 @@ const ListCards = (props) => {
                 <h3 className='text-center mb-3'>You Do not Have Any Cards</h3>
               )}
               {user?.cards?.map((card) => {
+                console.log('card list', card);
                 return (
                   <Col sm='6' lg='6' key={card._id}>
                     <UserCard userCard={card} userName={user.name} />

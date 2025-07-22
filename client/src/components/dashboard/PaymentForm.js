@@ -88,8 +88,8 @@ export default class PaymentForm extends React.Component {
             // <AlertMsg color='success'>{data?.message}</AlertMsg>
           )} */}
 
-          <Row>
-            <Col className='mt-5' sm='12' lg='4'>
+          <Row lg='12'>
+            <Col className='mt-5' sm='12' lg='5'>
               <CreditCards
                 cvc={this.state.cvc}
                 expiry={this.state.expiry}
@@ -98,7 +98,7 @@ export default class PaymentForm extends React.Component {
                 number={this.state.cardNumber}
               />
             </Col>
-            <Col lg='6' className='mx-5'>
+            <Col className='mx-5'>
               <Form onSubmit={this.onSubmit}>
                 <FormGroup className='my-2' controlid='name'>
                   <Label>Name</Label>

@@ -60,16 +60,9 @@ const Login = (props) => {
     }
   };
   return (
-    <Row className='container'>
-      <Col sm='12' lg='6' className='offset-md-4'>
+    <Row className='container d-flex justify-content-center'>
+      <Col sm='12' lg='6'>
         <Card>
-          {/* <CardImg
-            style={{
-              height: '18rem',
-            }}
-            alt='Card image cap'
-            src={bg1}
-          /> */}
           <CardBody className='p-4'>
             <Row>
               <Col>

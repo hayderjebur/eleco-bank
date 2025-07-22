@@ -20,11 +20,11 @@ export default function HeaderV2() {
     <div className='text-center mb-4'>
       <div className='d-flex justify-content-around align-items-center m-2 '>
         <Link to='/' className='nav-link'>
-          <img src={leftLogo} width={100} height={100} />
+          <img src={leftLogo} width={100} height={100} className='m-4' />
         </Link>
         <h2 className=''>Secure Bank System</h2>
 
-        <img src={rightLogo} width={100} height={100} />
+        <img src={rightLogo} width={100} height={100} className='m-4' />
       </div>
       {isAuthenticated && user?.isAdmin ? (
         <Button color='danger' onClick={logout}>

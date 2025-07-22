@@ -44,6 +44,7 @@ const AuthState = (props) => {
 
     try {
       const res = await axios.get(`/api/users/${id}`);
+      console.log('loadUser fired', res);
 
       dispatch({
         type: USER_LOADED,
@@ -58,6 +59,7 @@ const AuthState = (props) => {
 
     try {
       const res = await axios.get(`/api/users`);
+      console.log('res:', res);
       dispatch({
         type: USERS_LOADED,
         payload: res.data,
@@ -93,6 +95,7 @@ const AuthState = (props) => {
   };
   // Add Card
   const addCard = async (formData) => {
+    console.log('add card fired', formData);
     const config = {
       headers: {
         'Content-Type': 'application/json',
@@ -105,44 +108,15 @@ const AuthState = (props) => {
         formData,
         config
       );
-
+      console.log('add card fired 2', res);
       dispatch({
         type: ADD_CARD_SUCCESS,
-        payload: res.data,
+        payload: res?.data,
       });
     } catch (err) {
       dispatch({
         type: ADD_CARD_FAIL,
         payload: err.response.data.message,
-      });
-    }
-  };
-  // Add Signature
-  const addSignature = async (formData, cardId) => {
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    };
-    const dataBody = {
-      ellipticType: formData,
-    };
-    console.log(formData, typeof cardId);
-    try {
-      const res = await axios.post(
-        `api/users/${userId}/cards/${cardId}`,
-        dataBody,
-        config
-      );
-
-      dispatch({
-        type: ADD_SIGNATURE_SUCCESS,
-        payload: res.data,
-      });
-    } catch (err) {
-      dispatch({
-        type: ADD_SIGNATURE_FAIL,
-        payload: err.response.data.msg,
       });
     }
   };
@@ -200,7 +174,6 @@ const AuthState = (props) => {
         clearErrors,
         loadAllUsers,
         addCard,
-        addSignature,
         clearData,
       }}
     >

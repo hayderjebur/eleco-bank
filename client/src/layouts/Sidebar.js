@@ -34,7 +34,7 @@ const Sidebar = () => {
     document.getElementById('sidebarArea').classList.toggle('showSidebar');
   };
   let location = useLocation();
-  console.log(user);
+  // console.log(user);
 
   return (
     <div className='p-3' style={{ height: 'auto' }}>

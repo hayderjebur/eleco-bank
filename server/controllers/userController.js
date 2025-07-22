@@ -16,13 +16,14 @@ const authUser = asyncHandler(async (req, res) => {
   const user = await User.findOne({ email });
 
   if (user && (await user.matchPassword(password))) {
-    console.log(user);
+    // console.log(user);
     res.json({
       _id: user._id,
       name: user.name,
       email: user.email,
       isAdmin: user.isAdmin,
       token: generateToken(user._id),
+      cards: user.cards,
     });
   } else {
     res.status(401);
@@ -35,6 +36,7 @@ const authUser = asyncHandler(async (req, res) => {
 // @access  Private
 const createCard = asyncHandler(async (req, res) => {
   const { cardNumber, expiry, cvc } = req.body;
+  console.log(cardNumber, expiry, cvc);
   const user = await User.findById(req.params.id);
 
   const encryptedObject = encryptCard(cardNumber, expiry, cvc);
@@ -119,8 +121,22 @@ const registerUser = asyncHandler(async (req, res) => {
 // @route   GET /api/users
 // @access  Private/Admin
 const getUsers = asyncHandler(async (req, res) => {
-  const users = await User.find({}).select('-password  -cards.signature');
-  res.json(users);
+  const users = await User.find({}).select('-password');
+
+  if (users && users.length > 0) {
+    const updatedUsers = users.map((user) => {
+      const userObj = user.toObject(); // Convert Mongoose document to plain object
+      if (userObj.cards && userObj.cards.length > 0) {
+        userObj.cards = decryptAllCards(userObj.cards);
+      }
+      return userObj;
+    });
+
+    res.json(updatedUsers);
+  } else {
+    res.status(404);
+    throw new Error('User not found');
+  }
 });
 
 function decryptAllCards(cards = []) {
@@ -177,14 +193,15 @@ function decryptAllCards(cards = []) {
 // @route   GET /api/users/:id
 const getUserById = asyncHandler(async (req, res) => {
   const user = await User.findById(req.params.id).select('-password').lean();
-  // console.log(user);
 
   if (user) {
     let result;
     if (user.cards) {
       result = decryptAllCards(user.cards);
+      console.log('update', result);
     }
-    res.json(result);
+    const updatedUser = { ...user, cards: result };
+    res.json(updatedUser);
   } else {
     res.status(404);
     throw new Error('User not found');

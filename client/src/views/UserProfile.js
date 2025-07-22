@@ -12,6 +12,7 @@ const UserProfile = (props) => {
 
   const { users, isAuthenticated, user } = authContext;
   const profile = users?.filter((user) => user._id === id);
+  console.log('profile', profile);
   const userProfile = profile?.length > 0 ? profile[0] : [];
 
   useEffect(() => {
@@ -22,7 +23,7 @@ const UserProfile = (props) => {
 
   return (
     <main>
-      <div className='pageWrapper d-lg-flex mx-5'>
+      <div className='pageWrapper d-lg-flex mx-5 '>
         {!user?.isAdmin ? (
           <aside className='sidebarArea shadow' id='sidebarArea'>
             <Sidebar />
@@ -30,7 +31,7 @@ const UserProfile = (props) => {
         ) : null}
         <div className='text-center p-4'>
           {userProfile?.cards?.length > 0 ? (
-            <h3>{userProfile.name} Cards</h3>
+            <h3 className='mb-4'>{userProfile.name} Cards</h3>
           ) : (
             <Alert color='primary' className='text-center'>
               {userProfile.name} has No Cards
