@@ -36,6 +36,25 @@ const cardSchema = mongoose.Schema(
     timestamps: true,
   }
 );
+
+const transationsSchema = mongoose.Schema(
+  {
+    senderUser: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: 'User',
+    },
+    recipientUser: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: 'User',
+    },
+    amount: { type: Number, required: true },
+  },
+  {
+    timestamps: true,
+  }
+);
 const userSchema = mongoose.Schema(
   {
     name: {
@@ -58,6 +77,7 @@ const userSchema = mongoose.Schema(
       default: false,
     },
     cards: [cardSchema],
+    transations: [transationsSchema],
   },
   {
     timestamps: true,

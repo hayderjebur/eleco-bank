@@ -134,9 +134,9 @@ const getUsers = asyncHandler(async (req, res) => {
   const users = await User.find({}).select('-password');
 
   if (users && users.length > 0) {
-    const updatedUsers = getDecryptedUsersCards(users);
+    const decryptedUsersCards = getDecryptedUsersCards(users);
 
-    res.json(updatedUsers);
+    res.json(decryptedUsersCards);
   } else {
     res.status(404);
     throw new Error('User not found');
@@ -215,30 +215,85 @@ const getUserById = asyncHandler(async (req, res) => {
 // @route   GET /api/users/:id/send-funds
 const transfarFunds = asyncHandler(async (req, res) => {
   const { id } = req.params;
-  const { amount, cardNumber } = req.body;
+  const { amount, sendFromCardNumber, recipientCardNumber } = req.body;
+  let senderUserWithMatchingCard;
+  let recipientUserWithMatchingCard;
+  let senderCard;
+  let recipientCard;
+  const senderUser = await User.findById(id).select('-password');
   const users = await User.find({}).select('-password'); // Mongoose docs
-  const updatedUsers = getDecryptedUsersCards(users); // Plain JS objects
+  const decryptedUsersCards = getDecryptedUsersCards(users); // Plain JS objects
 
-  // Find matching decrypted user & card
-  const updatedUser = updatedUsers.find((user) =>
-    (user.cards || []).some((card) => card.cardNumber === cardNumber)
+  if (decryptedUsersCards) {
+    // Find matching decrypted user & card
+    senderUserWithMatchingCard = decryptedUsersCards.find((user) =>
+      (user?.cards || []).some((card) => card.cardNumber === sendFromCardNumber)
+    );
+    if (!senderUserWithMatchingCard) {
+      res.status(404).json({ message: 'Card with Funds not Found' });
+    }
+    const foundSenderCard = senderUserWithMatchingCard.cards.find(
+      (card) => card.cardNumber === sendFromCardNumber
+    );
+    if (senderUserWithMatchingCard) {
+      if (senderUser) {
+        senderCard = senderUser.cards.find(
+          (senderCard) =>
+            senderCard._id.toString() === foundSenderCard._id.toString()
+        );
+        if (senderCard && senderCard.balance > amount) {
+          senderCard.balance -= amount;
+          await senderUser.save();
+
+          // res.json({ message: 'Your money sent successfully' });
+        } else {
+          res.status(404).json({ message: 'You do not have anough funds' });
+        }
+      } else {
+        res.status(404).json({ message: 'User not found' });
+      }
+    } else {
+      res.status(404).json({ message: 'Decrypted user not found' });
+    }
+
+    // *** Recipient ****
+    // Plain Object
+    recipientUserWithMatchingCard = decryptedUsersCards.find((user) =>
+      (user?.cards || []).some(
+        (card) => card.cardNumber === recipientCardNumber
+      )
+    );
+    if (!recipientUserWithMatchingCard) {
+      res.status(404).json({ message: 'Recipient Card not Found' });
+    }
+  } else {
+    res.status(404).json({ message: 'Card not found' });
+  }
+  const foundRecipientCard = recipientUserWithMatchingCard.cards.find(
+    (card) => card.cardNumber === recipientCardNumber
   );
-  const foundCard = updatedUser.cards.find(
-    (card) => card.cardNumber === cardNumber
-  );
-  if (updatedUser) {
+  if (recipientUserWithMatchingCard) {
     // Find the original Mongoose doc that matches the updated user
     const realUser = users.find(
-      (user) => user._id.toString() === updatedUser._id.toString()
+      (user) =>
+        user._id.toString() === recipientUserWithMatchingCard._id.toString()
     );
 
     if (realUser) {
-      const card = realUser.cards.find(
-        (card) => card._id.toString() === foundCard._id.toString()
+      recipientCard = realUser.cards.find(
+        (recipientCard) =>
+          recipientCard._id.toString() === foundRecipientCard._id.toString()
       );
-      if (card) {
-        card.balance += amount;
-        await realUser.save(); // Now this works!
+
+      if (recipientCard) {
+        recipientCard.balance += amount;
+        const transations = {
+          senderUser: id,
+          recipientUser: realUser._id,
+          amount: amount,
+        };
+        senderUser.transations.push(transations);
+        await senderUser.save();
         res.json({ message: 'Your money sent successfully' });
       } else {
         res.status(404).json({ message: 'Card not found' });

@@ -19,7 +19,8 @@ import Message from '../../layouts/Message';
 import Sidebar from '../../layouts/Sidebar';
 function TransfarFundsForm() {
   const [card, setCard] = useState({
-    cardNumber: '',
+    recipientCardNumber: '',
+    sendFromCardNumber: '',
     focus: '',
     amount: 0,
   });
@@ -28,10 +29,12 @@ function TransfarFundsForm() {
   const authContext = useContext(AuthContext);
 
   const { setAlert, alerts } = alertContext;
+
   const { transfarFunds, error, isLoading, clearErrors, isAuthenticated } =
     authContext;
+  console.log('alert', alerts, error);
 
-  const { cardNumber, amount, focus } = card;
+  const { sendFromCardNumber, recipientCardNumber, amount, focus } = card;
 
   const onChange = (e) => setCard({ ...card, [e.target.name]: e.target.value });
   //   const onChange = (e) => {
@@ -40,13 +43,24 @@ function TransfarFundsForm() {
   const onSubmit = async (e) => {
     e.preventDefault();
 
-    if (cardNumber === '' || amount === 0) {
+    if (
+      sendFromCardNumber === '' ||
+      recipientCardNumber === '' ||
+      amount === 0
+    ) {
       setAlert('Please fill in all fields', 'danger');
     } else {
-      await transfarFunds({ amount, cardNumber });
+      await transfarFunds({
+        amount,
+        sendFromCardNumber,
+        recipientCardNumber,
+      });
+      setAlert('Funds sent successfully', 'success');
+
       setCard({
         amount: 0,
-        cardNumber: '',
+        recipientCardNumber: '',
+        sendFromCardNumber: '',
         focus: '',
       });
     }
@@ -64,12 +78,11 @@ function TransfarFundsForm() {
                 <Row>
                   <Col>
                     <Card>
-                      {error ||
-                        (alerts[0]?.msg && (
-                          <Message color='danger'>
-                            {error || alerts[0]?.msg}
-                          </Message>
-                        ))}
+                      {alerts[0]?.msg && (
+                        <Message color={`${alerts[0]?.type}`}>
+                          {alerts[0]?.msg}
+                        </Message>
+                      )}
                       <CardTitle tag='h6' className='border-bottom p-3 mb-0'>
                         <i className='bi bi-bell me-2'> </i>
                         Transfar Funds
@@ -77,15 +90,27 @@ function TransfarFundsForm() {
                       <CardBody>
                         <Form onSubmit={onSubmit}>
                           <FormGroup className='my-2' controlid='name'>
-                            <Label>Send to: Card Number</Label>
+                            <Label>Send From:</Label>
                             <Input
                               type='tel'
-                              name='cardNumber'
+                              name='sendFromCardNumber'
                               maxLength={16}
                               placeholder='Card Number'
                               onChange={onChange}
                               onFocus={onChange}
-                              value={cardNumber}
+                              value={sendFromCardNumber}
+                            ></Input>
+                          </FormGroup>
+                          <FormGroup className='my-2' controlid='name'>
+                            <Label>Send to:</Label>
+                            <Input
+                              type='tel'
+                              name='recipientCardNumber'
+                              maxLength={16}
+                              placeholder='Card Number'
+                              onChange={onChange}
+                              onFocus={onChange}
+                              value={recipientCardNumber}
                             ></Input>
                           </FormGroup>
 

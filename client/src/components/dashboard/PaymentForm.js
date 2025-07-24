@@ -12,6 +12,7 @@ import {
   Label,
   Row,
 } from 'reactstrap';
+import Message from '../../layouts/Message';
 
 export default class PaymentForm extends React.Component {
   state = {
@@ -30,7 +31,6 @@ export default class PaymentForm extends React.Component {
       this.setState({ ...this.state, calledAddCard: false });
     }
     if (prevProps.error !== error) {
-      console.log(error);
       setAlert(error, 'danger');
       clearErrors();
     }
@@ -58,6 +58,8 @@ export default class PaymentForm extends React.Component {
         expiry,
         cvc,
       });
+      setAlert('Funds sent successfully', 'success');
+
       this.setState({
         cvc: '',
         expiry: '',
@@ -70,10 +72,12 @@ export default class PaymentForm extends React.Component {
   };
 
   render() {
-    const { error, data } = this.props;
-    console.log(error);
+    const { alerts } = this.props;
     return (
       <Card>
+        {alerts[0]?.msg && (
+          <Message color={`${alerts[0]?.type}`}>{alerts[0]?.msg}</Message>
+        )}
         <CardBody>
           <CardTitle className='d-flex justify-content-center' tag='h5'>
             Credit Card Info

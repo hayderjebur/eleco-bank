@@ -14,7 +14,7 @@ const ListCards = (props) => {
 
   const { setAlert, alerts } = alertContext;
   const { user } = authContext;
-  console.log('user:', user);
+  // console.log('user:', user);
 
   return (
     <>
@@ -32,8 +32,8 @@ const ListCards = (props) => {
         <div className='mx-4'>
           {!user?.isAdmin && (
             <Row>
-              <p>Email: {user.email}</p>
-              <p>Number of Cards: {user.cards.length}</p>
+              <p>Email: {user?.email}</p>
+              <p>Number of Cards: {user?.cards?.length}</p>
               {user?.cards?.length > 0 ? (
                 <h3 className='text-center mb-3'>Your Cards</h3>
               ) : (
