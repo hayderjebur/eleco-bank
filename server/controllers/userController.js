@@ -117,6 +117,16 @@ const registerUser = asyncHandler(async (req, res) => {
   }
 });
 
+const getDecryptedUsersCards = (users) => {
+  return users.map((user) => {
+    const userObj = user.toObject(); // Convert Mongoose document to plain object
+    if (userObj.cards && userObj.cards.length > 0) {
+      userObj.cards = decryptAllCards(userObj.cards);
+    }
+    return userObj;
+  });
+};
+
 // @desc    Get all users
 // @route   GET /api/users
 // @access  Private/Admin
@@ -124,13 +134,7 @@ const getUsers = asyncHandler(async (req, res) => {
   const users = await User.find({}).select('-password');
 
   if (users && users.length > 0) {
-    const updatedUsers = users.map((user) => {
-      const userObj = user.toObject(); // Convert Mongoose document to plain object
-      if (userObj.cards && userObj.cards.length > 0) {
-        userObj.cards = decryptAllCards(userObj.cards);
-      }
-      return userObj;
-    });
+    const updatedUsers = getDecryptedUsersCards(users);
 
     res.json(updatedUsers);
   } else {
@@ -207,5 +211,51 @@ const getUserById = asyncHandler(async (req, res) => {
     throw new Error('User not found');
   }
 });
+// @desc    Transfar Funds
+// @route   GET /api/users/:id/send-funds
+const transfarFunds = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  const { amount, cardNumber } = req.body;
+  const users = await User.find({}).select('-password'); // Mongoose docs
+  const updatedUsers = getDecryptedUsersCards(users); // Plain JS objects
 
-export { authUser, registerUser, getUsers, getUserById, createCard };
+  // Find matching decrypted user & card
+  const updatedUser = updatedUsers.find((user) =>
+    (user.cards || []).some((card) => card.cardNumber === cardNumber)
+  );
+  const foundCard = updatedUser.cards.find(
+    (card) => card.cardNumber === cardNumber
+  );
+  if (updatedUser) {
+    // Find the original Mongoose doc that matches the updated user
+    const realUser = users.find(
+      (user) => user._id.toString() === updatedUser._id.toString()
+    );
+
+    if (realUser) {
+      const card = realUser.cards.find(
+        (card) => card._id.toString() === foundCard._id.toString()
+      );
+      if (card) {
+        card.balance += amount;
+        await realUser.save(); // Now this works!
+        res.json({ message: 'Your money sent successfully' });
+      } else {
+        res.status(404).json({ message: 'Card not found' });
+      }
+    } else {
+      res.status(404).json({ message: 'User not found' });
+    }
+  } else {
+    res.status(404).json({ message: 'Decrypted user not found' });
+  }
+});
+
+export {
+  authUser,
+  registerUser,
+  getUsers,
+  getUserById,
+  createCard,
+  transfarFunds,
+};

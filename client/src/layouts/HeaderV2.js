@@ -22,7 +22,9 @@ export default function HeaderV2() {
         <Link to='/' className='nav-link'>
           <img src={leftLogo} width={100} height={100} className='m-4' />
         </Link>
-        <h2 className=''>Secure Bank System</h2>
+        <Link to='/' className='nav-link'>
+          <h2>Secure Bank System</h2>
+        </Link>
 
         <img src={rightLogo} width={100} height={100} className='m-4' />
       </div>

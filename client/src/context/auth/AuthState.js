@@ -19,6 +19,8 @@ import {
   ADD_SIGNATURE_SUCCESS,
   ADD_SIGNATURE_FAIL,
   CLEAR_DATA,
+  TRANSFAR_FUNDS_FAIL,
+  TRANSFAR_FUNDS_SUCCESS,
 } from '../types';
 
 const token = localStorage.getItem('token');
@@ -95,7 +97,6 @@ const AuthState = (props) => {
   };
   // Add Card
   const addCard = async (formData) => {
-    console.log('add card fired', formData);
     const config = {
       headers: {
         'Content-Type': 'application/json',
@@ -108,7 +109,6 @@ const AuthState = (props) => {
         formData,
         config
       );
-      console.log('add card fired 2', res);
       dispatch({
         type: ADD_CARD_SUCCESS,
         payload: res?.data,
@@ -116,6 +116,31 @@ const AuthState = (props) => {
     } catch (err) {
       dispatch({
         type: ADD_CARD_FAIL,
+        payload: err.response.data.message,
+      });
+    }
+  };
+  // Transfar Funds
+  const transfarFunds = async (formData) => {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+
+    try {
+      const res = await axios.post(
+        `api/users/${userId}/send-funds`,
+        formData,
+        config
+      );
+      dispatch({
+        type: TRANSFAR_FUNDS_SUCCESS,
+        payload: res?.data,
+      });
+    } catch (err) {
+      dispatch({
+        type: TRANSFAR_FUNDS_FAIL,
         payload: err.response.data.message,
       });
     }
@@ -175,6 +200,7 @@ const AuthState = (props) => {
         loadAllUsers,
         addCard,
         clearData,
+        transfarFunds,
       }}
     >
       {props.children}

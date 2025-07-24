@@ -16,7 +16,7 @@ const navigation = [
   },
   {
     title: 'Money transfar',
-    href: '/',
+    href: '/transfar-funds',
     icon: 'bi bi-coin',
   },
   {

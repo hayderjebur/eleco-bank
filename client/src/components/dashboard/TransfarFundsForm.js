@@ -1,0 +1,136 @@
+import React, { useState, useContext } from 'react';
+import {
+  Button,
+  Card,
+  CardBody,
+  CardTitle,
+  Col,
+  Form,
+  FormGroup,
+  Input,
+  Label,
+  Row,
+  Spinner,
+} from 'reactstrap';
+
+import AlertContext from '../../context/alert/alertContext';
+import AuthContext from '../../context/auth/authContext';
+import Message from '../../layouts/Message';
+import Sidebar from '../../layouts/Sidebar';
+function TransfarFundsForm() {
+  const [card, setCard] = useState({
+    cardNumber: '',
+    focus: '',
+    amount: 0,
+  });
+
+  const alertContext = useContext(AlertContext);
+  const authContext = useContext(AuthContext);
+
+  const { setAlert, alerts } = alertContext;
+  const { transfarFunds, error, isLoading, clearErrors, isAuthenticated } =
+    authContext;
+
+  const { cardNumber, amount, focus } = card;
+
+  const onChange = (e) => setCard({ ...card, [e.target.name]: e.target.value });
+  //   const onChange = (e) => {
+  //     setCard({ focus: e.target.name });
+  //   };
+  const onSubmit = async (e) => {
+    e.preventDefault();
+
+    if (cardNumber === '' || amount === 0) {
+      setAlert('Please fill in all fields', 'danger');
+    } else {
+      await transfarFunds({ amount, cardNumber });
+      setCard({
+        amount: 0,
+        cardNumber: '',
+        focus: '',
+      });
+    }
+  };
+  return (
+    <div className='pageWrapper d-lg-flex justify-content-center mx-5 w-100'>
+      <asid className='sidebarArea shadow mx-5' id='sidebarArea'>
+        <Sidebar />
+      </asid>
+      <div className='w-100'>
+        <Row className='container d-flex justify-content-center'>
+          <Col sm='12'>
+            <Card>
+              <CardBody className='p-4'>
+                <Row>
+                  <Col>
+                    <Card>
+                      {error ||
+                        (alerts[0]?.msg && (
+                          <Message color='danger'>
+                            {error || alerts[0]?.msg}
+                          </Message>
+                        ))}
+                      <CardTitle tag='h6' className='border-bottom p-3 mb-0'>
+                        <i className='bi bi-bell me-2'> </i>
+                        Transfar Funds
+                      </CardTitle>
+                      <CardBody>
+                        <Form onSubmit={onSubmit}>
+                          <FormGroup className='my-2' controlid='name'>
+                            <Label>Send to: Card Number</Label>
+                            <Input
+                              type='tel'
+                              name='cardNumber'
+                              maxLength={16}
+                              placeholder='Card Number'
+                              onChange={onChange}
+                              onFocus={onChange}
+                              value={cardNumber}
+                            ></Input>
+                          </FormGroup>
+
+                          <FormGroup className='my-2' controlid='password'>
+                            <Label>Amount of Money</Label>
+                            <Input
+                              id='exampleAmount'
+                              name='amount'
+                              maxLength={5}
+                              placeholder='Amount of Money'
+                              //   pattern='\d\d/\d\d'
+                              // required
+                              type='number'
+                              onChange={onChange}
+                              onFocus={onChange}
+                              value={amount}
+                            />
+                          </FormGroup>
+                          <Button
+                            color='primary'
+                            className='mt-2'
+                            disabled={isLoading}
+                            onClick={onSubmit}
+                          >
+                            {isLoading ? (
+                              <>
+                                <Spinner size='sm'>Loading...</Spinner>
+                                <span> Loading</span>
+                              </>
+                            ) : (
+                              'Send'
+                            )}
+                          </Button>
+                        </Form>
+                      </CardBody>
+                    </Card>
+                  </Col>
+                </Row>
+              </CardBody>
+            </Card>
+          </Col>
+        </Row>
+      </div>
+    </div>
+  );
+}
+
+export default TransfarFundsForm;

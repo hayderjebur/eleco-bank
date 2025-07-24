@@ -12,7 +12,6 @@ import {
   Label,
   Row,
 } from 'reactstrap';
-import Message from '../../layouts/Message';
 
 export default class PaymentForm extends React.Component {
   state = {
@@ -35,11 +34,6 @@ export default class PaymentForm extends React.Component {
       setAlert(error, 'danger');
       clearErrors();
     }
-    // if (prevProps.date !== data) {
-    //   console.log(error);
-    //   setAlert(data?.message, 'success');
-    //   clearData();
-    // }
   }
   handleInputFocus = (e) => {
     this.setState({ focus: e.target.name });
@@ -84,9 +78,6 @@ export default class PaymentForm extends React.Component {
           <CardTitle className='d-flex justify-content-center' tag='h5'>
             Credit Card Info
           </CardTitle>
-          {/* {data && data?.message && (
-            // <AlertMsg color='success'>{data?.message}</AlertMsg>
-          )} */}
 
           <Row lg='12'>
             <Col className='mt-5' sm='12' lg='5'>

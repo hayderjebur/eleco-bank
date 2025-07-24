@@ -27,7 +27,7 @@ const AddCard = () => {
     <>
       {!user?.isAdmin ? (
         <main>
-          <div className='pageWrapper d-lg-flex mx-5'>
+          <div className='pageWrapper d-lg-flex mx-5 w-100'>
             <aside className='sidebarArea shadow' id='sidebarArea'>
               <Sidebar />
             </aside>

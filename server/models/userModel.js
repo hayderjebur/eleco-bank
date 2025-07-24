@@ -21,6 +21,11 @@ const cardSchema = mongoose.Schema(
     cardNumber: encryptNumberSchema,
     expiry: encryptNumberSchema,
     cvc: encryptNumberSchema,
+    balance: {
+      type: Number,
+      required: false,
+      default: 0,
+    },
     user: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,

@@ -32,16 +32,18 @@ const ListCards = (props) => {
         <div className='mx-4'>
           {!user?.isAdmin && (
             <Row>
+              <p>Email: {user.email}</p>
+              <p>Number of Cards: {user.cards.length}</p>
               {user?.cards?.length > 0 ? (
                 <h3 className='text-center mb-3'>Your Cards</h3>
               ) : (
                 <h3 className='text-center mb-3'>You Do not Have Any Cards</h3>
               )}
               {user?.cards?.map((card) => {
-                console.log('card list', card);
                 return (
-                  <Col sm='6' lg='6' key={card._id}>
+                  <Col sm='6' lg='6' key={card._id} className='text-center'>
                     <UserCard userCard={card} userName={user.name} />
+                    <h5 className='m-2'>The balance: ${card.balance}</h5>
                   </Col>
                 );
               })}
