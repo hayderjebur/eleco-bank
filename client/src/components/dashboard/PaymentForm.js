@@ -87,7 +87,7 @@ export default class PaymentForm extends React.Component {
             <Col className='mt-5' sm='12' lg='5'>
               <CreditCards
                 cvc={this.state.cvc}
-                expiry={this.state.expiry}
+                x={'12/34'}
                 focused={this.state.focus}
                 name={this.state.name}
                 number={this.state.cardNumber}

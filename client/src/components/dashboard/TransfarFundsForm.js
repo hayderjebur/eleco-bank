@@ -30,9 +30,7 @@ function TransfarFundsForm() {
 
   const { setAlert, alerts } = alertContext;
 
-  const { transfarFunds, error, isLoading, clearErrors, isAuthenticated } =
-    authContext;
-  console.log('alert', alerts, error);
+  const { transfarFunds, isLoading } = authContext;
 
   const { sendFromCardNumber, recipientCardNumber, amount, focus } = card;
 
@@ -130,8 +128,8 @@ function TransfarFundsForm() {
                             />
                           </FormGroup>
                           <Button
-                            color='primary'
-                            className='mt-2'
+                            color='success'
+                            className='mt-2 px-4'
                             disabled={isLoading}
                             onClick={onSubmit}
                           >

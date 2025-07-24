@@ -39,15 +39,17 @@ const cardSchema = mongoose.Schema(
 
 const transationsSchema = mongoose.Schema(
   {
-    senderUser: {
-      type: mongoose.Schema.Types.ObjectId,
+    senderCardNumber: {
+      type: String,
       required: true,
-      ref: 'User',
     },
-    recipientUser: {
-      type: mongoose.Schema.Types.ObjectId,
+    recipientCardNumber: {
+      type: String,
       required: true,
-      ref: 'User',
+    },
+    recipientEmail: {
+      type: String,
+      required: true,
     },
     amount: { type: Number, required: true },
   },

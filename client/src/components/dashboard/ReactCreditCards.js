@@ -240,7 +240,7 @@ class ReactCreditCards extends React.Component {
               className={[
                 'rccs__expiry',
                 focused === 'expiry' ? 'rccs--focused' : '',
-                expiry.substr(0, 1) !== '•' ? 'rccs--filled' : '',
+                // expiry.substr(0, 1) !== '•' ? 'rccs--filled' : '',
               ]
                 .join(' ')
                 .trim()}

@@ -15,6 +15,7 @@ import HeaderV2 from './layouts/HeaderV2';
 import AddCard from './layouts/AddCard';
 import ListCards from './views/ListCards';
 import TransfarFundsForm from './components/dashboard/TransfarFundsForm';
+import TransationHistory from './views/TransationHistory';
 
 const App = () => {
   return (
@@ -30,6 +31,11 @@ const App = () => {
               exact
               path='/transfar-funds'
               component={TransfarFundsForm}
+            />
+            <PrivateRoute
+              exact
+              path='/transation-history'
+              component={TransationHistory}
             />
             <PrivateRoute
               exact

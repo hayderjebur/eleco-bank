@@ -11,7 +11,7 @@ const navigation = [
   },
   {
     title: 'Transation History',
-    href: '/',
+    href: '/transation-history',
     icon: 'bi bi-graph-up-arrow',
   },
   {
