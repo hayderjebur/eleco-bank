@@ -1,17 +1,15 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Table } from 'reactstrap';
 import Sidebar from '../layouts/Sidebar';
-// import AlertContext from '../../context/alert/alertContext';
 import AuthContext from '../context/auth/authContext';
 
 const TransationHistory = () => {
-  //   const alertContext = useContext(AlertContext);
   const authContext = useContext(AuthContext);
+  const { user, data, loadUser, userId } = authContext;
 
-  //   const { setAlert, alerts } = alertContext;
-
-  const { transfarFunds, isLoading, user } = authContext;
-  console.log(user);
+  useEffect(() => {
+    loadUser(userId);
+  }, [data]);
   return (
     <div className='pageWrapper d-lg-flex justify-content-center mx-5 w-100'>
       <asid className='sidebarArea shadow mx-5' id='sidebarArea'>
@@ -29,17 +27,15 @@ const TransationHistory = () => {
             </tr>
           </thead>
           <tbody>
-            <tr className='table-success'>
-              {user?.transations?.map((trans, index) => (
-                <>
-                  <th scope='row'>{1 + index}</th>
-                  <td>{trans.senderCardNumber}</td>
-                  <td>{trans.recipientCardNumber}</td>
-                  <td>{trans.amount}</td>
-                  <td>{trans.createdAt.split('T')[0]}</td>
-                </>
-              ))}
-            </tr>
+            {user?.transations?.map((trans, index) => (
+              <tr className='table-success'>
+                <th scope='row'>{1 + index}</th>
+                <td>{trans.senderCardNumber}</td>
+                <td>{trans.recipientCardNumber}</td>
+                <td>${trans.amount}</td>
+                <td>{trans.createdAt.split('T')[0]}</td>
+              </tr>
+            ))}
           </tbody>
         </Table>
       </div>

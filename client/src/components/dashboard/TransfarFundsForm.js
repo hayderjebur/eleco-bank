@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import {
   Button,
   Card,
@@ -30,10 +30,17 @@ function TransfarFundsForm() {
 
   const { setAlert, alerts } = alertContext;
 
-  const { transfarFunds, isLoading } = authContext;
+  const { transfarFunds, isLoading, error, data, clearErrors } = authContext;
+  console.log('error inside component', error);
 
   const { sendFromCardNumber, recipientCardNumber, amount, focus } = card;
-
+  useEffect(() => {
+    if (error) {
+      setAlert(error, 'danger');
+      clearErrors();
+    }
+    // eslint-disable-next-line
+  }, [error, data?.message]);
   const onChange = (e) => setCard({ ...card, [e.target.name]: e.target.value });
   //   const onChange = (e) => {
   //     setCard({ focus: e.target.name });
@@ -48,19 +55,22 @@ function TransfarFundsForm() {
     ) {
       setAlert('Please fill in all fields', 'danger');
     } else {
-      await transfarFunds({
+      const res = await transfarFunds({
         amount,
         sendFromCardNumber,
         recipientCardNumber,
       });
-      setAlert('Funds sent successfully', 'success');
+      console.log('xxx', res);
 
-      setCard({
-        amount: 0,
-        recipientCardNumber: '',
-        sendFromCardNumber: '',
-        focus: '',
-      });
+      if (res === 'done') {
+        setAlert(data?.message, 'success');
+        setCard({
+          amount: 0,
+          recipientCardNumber: '',
+          sendFromCardNumber: '',
+          focus: '',
+        });
+      }
     }
   };
   return (

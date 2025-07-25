@@ -36,7 +36,6 @@ const authUser = asyncHandler(async (req, res) => {
 // @access  Private
 const createCard = asyncHandler(async (req, res) => {
   const { cardNumber, expiry, cvc } = req.body;
-  console.log(cardNumber, expiry, cvc);
   const user = await User.findById(req.params.id);
 
   const encryptedObject = encryptCard(cardNumber, expiry, cvc);
@@ -227,12 +226,19 @@ const transfarFunds = asyncHandler(async (req, res) => {
 
   if (decryptedUsersCards) {
     // Find matching decrypted user & card
-    senderUserWithMatchingCardObject = decryptedUsersCards.find((user) =>
-      (user?.cards || []).some((card) => card.cardNumber === sendFromCardNumber)
-    );
+    senderUserWithMatchingCardObject = decryptedUsersCards.find((user) => {
+      return (
+        user._id.toString() === id &&
+        (user?.cards || []).some(
+          (card) => card.cardNumber === sendFromCardNumber
+        )
+      );
+    });
+
     if (!senderUserWithMatchingCardObject) {
-      res.status(404).json({ message: 'Card with Funds not Found' });
+      return res.status(404).json({ message: 'You do not own the card' });
     }
+
     foundSenderCardObject = senderUserWithMatchingCardObject.cards.find(
       (card) => card.cardNumber === sendFromCardNumber
     );
@@ -291,7 +297,9 @@ const transfarFunds = asyncHandler(async (req, res) => {
       );
 
       if (recipientCardMongoose) {
+        console.log('recipientCardMongoose', recipientCardMongoose);
         recipientCardMongoose.balance += amount;
+        await userMongoose.save();
         const transations = {
           recipientEmail: recipientUserWithMatchingCardObject?.email,
           recipientCardNumber: foundRecipientCardObject.cardNumber,

@@ -24,8 +24,7 @@ export default class PaymentForm extends React.Component {
     calledAddCard: false,
   };
   componentDidUpdate(prevProps, prevState) {
-    const { userId, loadUser, error, setAlert, clearErrors, data, clearData } =
-      this.props;
+    const { userId, loadUser, error, setAlert, clearErrors } = this.props;
     if (prevState.calledAddCard !== this.state.calledAddCard) {
       loadUser(userId);
       this.setState({ ...this.state, calledAddCard: false });

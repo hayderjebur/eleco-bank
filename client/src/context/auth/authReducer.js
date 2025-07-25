@@ -13,6 +13,8 @@ import {
   ADD_CARD_SUCCESS,
   ADD_CARD_FAIL,
   CLEAR_DATA,
+  TRANSFAR_FUNDS_SUCCESS,
+  TRANSFAR_FUNDS_FAIL,
 } from '../types';
 
 // eslint-disable-next-line import/no-anonymous-default-export
@@ -40,7 +42,6 @@ export default (state, action) => {
     case LOGIN_SUCCESS:
       localStorage.setItem('token', action.payload.token);
       localStorage.setItem('userId', action.payload._id);
-      console.log('action.payload', action.payload);
 
       return {
         ...state,
@@ -54,6 +55,18 @@ export default (state, action) => {
         ...state,
         data: action.payload,
         isLoading: false,
+      };
+    case TRANSFAR_FUNDS_SUCCESS:
+      return {
+        ...state,
+        data: action.payload,
+        isLoading: false,
+      };
+    case TRANSFAR_FUNDS_FAIL:
+      return {
+        ...state,
+        isLoading: false,
+        error: action.payload,
       };
     case CLEAR_DATA:
       return {

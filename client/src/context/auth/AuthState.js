@@ -46,7 +46,6 @@ const AuthState = (props) => {
 
     try {
       const res = await axios.get(`/api/users/${id}`);
-      console.log('loadUser fired', res);
 
       dispatch({
         type: USER_LOADED,
@@ -61,7 +60,6 @@ const AuthState = (props) => {
 
     try {
       const res = await axios.get(`/api/users`);
-      console.log('res:', res);
       dispatch({
         type: USERS_LOADED,
         payload: res.data,
@@ -134,15 +132,19 @@ const AuthState = (props) => {
         formData,
         config
       );
+
       dispatch({
         type: TRANSFAR_FUNDS_SUCCESS,
         payload: res?.data,
       });
+      return 'done';
     } catch (err) {
+      console.log('err:', err);
       dispatch({
         type: TRANSFAR_FUNDS_FAIL,
         payload: err.response.data.message,
       });
+      return 'fail';
     }
   };
 

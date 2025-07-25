@@ -21,34 +21,32 @@ const AddCard = () => {
     data,
     clearErrors,
     clearData,
-    isAuthenticated,
   } = authContext;
+
   return (
     <>
       {!user?.isAdmin ? (
-        <main>
-          <div className='pageWrapper d-lg-flex mx-5 w-100'>
-            <aside className='sidebarArea shadow' id='sidebarArea'>
-              <Sidebar />
-            </aside>
+        <div className='pageWrapper d-lg-flex justify-content-center mx-5 w-100'>
+          <asid className='sidebarArea shadow mx-5' id='sidebarArea'>
+            <Sidebar />
+          </asid>
 
-            <div className='contentArea'>
-              <Container className=' wrapper' fluid>
-                <PaymentForm
-                  error={error}
-                  setAlert={setAlert}
-                  alerts={alerts}
-                  addCard={addCard}
-                  loadUser={loadUser}
-                  userId={userId}
-                  data={data}
-                  clearErrors={clearErrors}
-                  clearData={clearData}
-                />
-              </Container>
-            </div>
+          <div className='w-100'>
+            {/* <Container f> */}
+            <PaymentForm
+              error={error}
+              setAlert={setAlert}
+              alerts={alerts}
+              addCard={addCard}
+              loadUser={loadUser}
+              userId={userId}
+              data={data}
+              clearErrors={clearErrors}
+              clearData={clearData}
+            />
+            {/* </Container> */}
           </div>
-        </main>
+        </div>
       ) : null}
     </>
   );
