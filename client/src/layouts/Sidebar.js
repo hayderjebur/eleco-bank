@@ -35,7 +35,7 @@ const Sidebar = () => {
   };
   let location = useLocation();
   // console.log(user);
-  if (user?.isAdmin) return null;
+  // if (user?.isAdmin) return null;
   return (
     <div style={{ minWidth: '20%' }}>
       <aside className='sidebarArea shadow' id='sidebarArea'>

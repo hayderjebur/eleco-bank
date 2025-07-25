@@ -140,7 +140,6 @@ const AuthState = (props) => {
       });
       return 'done';
     } catch (err) {
-      console.log('err:', err);
       dispatch({
         type: TRANSFAR_FUNDS_FAIL,
         payload: err.response.data.message,
@@ -157,7 +156,7 @@ const AuthState = (props) => {
     };
     try {
       const res = await axios.post('/api/users/deposit', formData, config);
-
+      console.log('res.data', res.data);
       dispatch({
         type: DEPOSIT_SUCCESS,
         payload: res?.data,

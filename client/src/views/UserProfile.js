@@ -28,6 +28,13 @@ const UserProfile = (props) => {
   } = authContext;
   const [deposits, setDeposits] = useState({});
 
+  let flag;
+  if (localStorage.getItem('userId') === user?._id) {
+    flag = false;
+  }
+
+  // console.log('shouldShowSidebar', flag);
+
   const profile = users?.filter((user) => user._id === id);
   const userProfile = profile?.length > 0 ? profile[0] : [];
 
@@ -41,6 +48,8 @@ const UserProfile = (props) => {
     }
     loadUser(userProfile._id);
   }, [isAuthenticated, props.history, error, data, userProfile._id]);
+
+  // console.log('data', data);
 
   const onChange = (e, cardNumber) => {
     const value = e.target.value;
@@ -63,9 +72,8 @@ const UserProfile = (props) => {
         depositFunds,
         recipientCardNumber,
       });
-
       if (res === 'done') {
-        setAlert(data?.message, 'success');
+        setAlert('The deposit sent successfully', 'success');
         setDeposits({});
       }
     }
@@ -73,13 +81,13 @@ const UserProfile = (props) => {
 
   return (
     <main className='d-flex justify-content-center align-items-center flex-column'>
-      <div style={{ maxWidth: '40%', minHeight: '5rem' }}>
+      <div style={{ maxWidth: '80%', minHeight: '5rem' }}>
         {alerts[0]?.msg && (
           <Message color={`${alerts[0]?.type}`}>{alerts[0]?.msg}</Message>
         )}
       </div>
       <div className='pageWrapper d-lg-flex mx-5 text-center'>
-        <Sidebar />
+        {flag ? <Sidebar /> : null}
         <div className='text-center'>
           {userProfile?.cards?.length > 0 ? (
             <h3 className='mb-4'>{userProfile.name} Cards</h3>
