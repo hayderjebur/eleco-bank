@@ -66,11 +66,11 @@ const UserProfile = (props) => {
 
       if (res === 'done') {
         setAlert(data?.message, 'success');
-        // setDeposits({});
+        setDeposits({});
       }
     }
   };
-  // console.log('user?.isAdmin');
+
   return (
     <main className='d-flex justify-content-center align-items-center flex-column'>
       <div style={{ maxWidth: '40%', minHeight: '5rem' }}>
@@ -79,14 +79,7 @@ const UserProfile = (props) => {
         )}
       </div>
       <div className='pageWrapper d-lg-flex mx-5 text-center'>
-        {/* {user?.isAdmin ? (
-          <div style={{ minWidth: '20%' }}>
-            <aside className='sidebarArea shadow' id='sidebarArea'> */}
         <Sidebar />
-        {/* </aside>
-          </div>
-        ) : null} */}
-
         <div className='text-center'>
           {userProfile?.cards?.length > 0 ? (
             <h3 className='mb-4'>{userProfile.name} Cards</h3>
