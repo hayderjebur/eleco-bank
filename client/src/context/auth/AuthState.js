@@ -21,6 +21,8 @@ import {
   CLEAR_DATA,
   TRANSFAR_FUNDS_FAIL,
   TRANSFAR_FUNDS_SUCCESS,
+  DEPOSIT_SUCCESS,
+  DEPOSIT_FAIL,
 } from '../types';
 
 const token = localStorage.getItem('token');
@@ -125,7 +127,6 @@ const AuthState = (props) => {
         'Content-Type': 'application/json',
       },
     };
-
     try {
       const res = await axios.post(
         `api/users/${userId}/send-funds`,
@@ -142,6 +143,29 @@ const AuthState = (props) => {
       console.log('err:', err);
       dispatch({
         type: TRANSFAR_FUNDS_FAIL,
+        payload: err.response.data.message,
+      });
+      return 'fail';
+    }
+  };
+  // Deposit Funds
+  const depositsMoney = async (formData) => {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+    try {
+      const res = await axios.post('/api/users/deposit', formData, config);
+
+      dispatch({
+        type: DEPOSIT_SUCCESS,
+        payload: res?.data,
+      });
+      return 'done';
+    } catch (err) {
+      dispatch({
+        type: DEPOSIT_FAIL,
         payload: err.response.data.message,
       });
       return 'fail';
@@ -203,6 +227,7 @@ const AuthState = (props) => {
         addCard,
         clearData,
         transfarFunds,
+        depositsMoney,
       }}
     >
       {props.children}

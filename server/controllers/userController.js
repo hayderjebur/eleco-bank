@@ -201,7 +201,6 @@ const getUserById = asyncHandler(async (req, res) => {
     let result;
     if (user.cards) {
       result = decryptAllCards(user.cards);
-      console.log('update', result);
     }
     const updatedUser = { ...user, cards: result };
     res.json(updatedUser);
@@ -297,7 +296,6 @@ const transfarFunds = asyncHandler(async (req, res) => {
       );
 
       if (recipientCardMongoose) {
-        console.log('recipientCardMongoose', recipientCardMongoose);
         recipientCardMongoose.balance += amount;
         await userMongoose.save();
         const transations = {
@@ -320,6 +318,45 @@ const transfarFunds = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc    Deposit funds to users
+// @route   GET /api/users/deposit
+const adminDepositFunds = asyncHandler(async (req, res) => {
+  const { depositFunds, recipientCardNumber, recipientId } = req.body;
+  const userMongoose = await User.findById(recipientId).select('-password');
+  const decryptedUserCards = getDecryptedUsersCards([userMongoose]);
+
+  // Plain Object
+  const recipientUserWithMatchingCardObject = decryptedUserCards.find((user) =>
+    (user?.cards || []).some((card) => card.cardNumber === recipientCardNumber)
+  );
+  if (!recipientUserWithMatchingCardObject) {
+    res.status(404).json({ message: 'Recipient Card not Found' });
+  }
+
+  const foundRecipientCardObject =
+    recipientUserWithMatchingCardObject.cards.find(
+      (card) => card.cardNumber === recipientCardNumber
+    );
+
+  if (userMongoose) {
+    const recipientCardMongoose = userMongoose.cards.find(
+      (recipientCardMongoose) =>
+        recipientCardMongoose._id.toString() ===
+        foundRecipientCardObject._id.toString()
+    );
+
+    if (recipientCardMongoose) {
+      recipientCardMongoose.balance += Number(depositFunds);
+      await userMongoose.save();
+      res.json({ message: 'The deposit sent successfully' });
+    } else {
+      res.status(404).json({ message: 'Card not found' });
+    }
+  } else {
+    res.status(404).json({ message: 'User not found' });
+  }
+});
+
 export {
   authUser,
   registerUser,
@@ -327,4 +364,5 @@ export {
   getUserById,
   createCard,
   transfarFunds,
+  adminDepositFunds,
 };

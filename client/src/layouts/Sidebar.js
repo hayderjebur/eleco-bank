@@ -35,41 +35,45 @@ const Sidebar = () => {
   };
   let location = useLocation();
   // console.log(user);
-
+  if (user?.isAdmin) return null;
   return (
-    <div className='p-3' style={{ height: 'auto' }}>
-      <div className='d-flex align-items-center justify-content-center'>
-        <span className='ms-auto d-lg-none'>
-          <Button
-            close
-            size='sm'
-            className='ms-auto d-lg-none'
-            onClick={() => showMobilemenu()}
-          ></Button>
-        </span>
-      </div>
-      <div className='pt-4 mt-2'>
-        <Nav vertical className='sidebarNav'>
-          {navigation.map((navi, index) => (
-            <NavItem key={index} className='sidenav-bg'>
-              <Link
-                to={navi.href}
-                className={
-                  location.pathname === navi.href
-                    ? 'text-primary nav-link py-3'
-                    : 'nav-link text-secondary py-3'
-                }
-              >
-                <i className={navi.icon}></i>
-                <span className='ms-3 d-inline-block'>{navi.title}</span>
-              </Link>
-            </NavItem>
-          ))}
-          <Button color='danger' className='mt-3' onClick={logout}>
-            Sign out
-          </Button>
-        </Nav>
-      </div>
+    <div style={{ minWidth: '20%' }}>
+      <aside className='sidebarArea shadow' id='sidebarArea'>
+        <div className='p-3' style={{ height: 'auto' }}>
+          <div className='d-flex align-items-center justify-content-center'>
+            <span className='ms-auto d-lg-none'>
+              <Button
+                close
+                size='sm'
+                className='ms-auto d-lg-none'
+                onClick={() => showMobilemenu()}
+              ></Button>
+            </span>
+          </div>
+          <div className='pt-4 mt-2'>
+            <Nav vertical className='sidebarNav'>
+              {navigation.map((navi, index) => (
+                <NavItem key={index} className='sidenav-bg'>
+                  <Link
+                    to={navi.href}
+                    className={
+                      location.pathname === navi.href
+                        ? 'text-primary nav-link py-3'
+                        : 'nav-link text-secondary py-3'
+                    }
+                  >
+                    <i className={navi.icon}></i>
+                    <span className='ms-3 d-inline-block'>{navi.title}</span>
+                  </Link>
+                </NavItem>
+              ))}
+              <Button color='danger' className='mt-3' onClick={logout}>
+                Sign out
+              </Button>
+            </Nav>
+          </div>
+        </div>
+      </aside>
     </div>
   );
 };

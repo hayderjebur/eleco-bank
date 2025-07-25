@@ -31,9 +31,8 @@ function TransfarFundsForm() {
   const { setAlert, alerts } = alertContext;
 
   const { transfarFunds, isLoading, error, data, clearErrors } = authContext;
-  console.log('error inside component', error);
 
-  const { sendFromCardNumber, recipientCardNumber, amount, focus } = card;
+  const { sendFromCardNumber, recipientCardNumber, amount } = card;
   useEffect(() => {
     if (error) {
       setAlert(error, 'danger');
@@ -42,9 +41,7 @@ function TransfarFundsForm() {
     // eslint-disable-next-line
   }, [error, data?.message]);
   const onChange = (e) => setCard({ ...card, [e.target.name]: e.target.value });
-  //   const onChange = (e) => {
-  //     setCard({ focus: e.target.name });
-  //   };
+
   const onSubmit = async (e) => {
     e.preventDefault();
 
@@ -60,7 +57,6 @@ function TransfarFundsForm() {
         sendFromCardNumber,
         recipientCardNumber,
       });
-      console.log('xxx', res);
 
       if (res === 'done') {
         setAlert(data?.message, 'success');

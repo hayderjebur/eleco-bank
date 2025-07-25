@@ -1,20 +1,14 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 import AuthContext from '../context/auth/authContext';
 import { Col, Row } from 'reactstrap';
 import UsersTables from '../components/dashboard/UsersTable';
 import UserCard from '../components/dashboard/UserCard';
-import PaymentForm from '../components/dashboard/PaymentForm';
-import AlertContext from '../context/alert/alertContext';
 import Sidebar from '../layouts/Sidebar';
 
-const ListCards = (props) => {
+const ListCards = () => {
   const authContext = useContext(AuthContext);
-  const alertContext = useContext(AlertContext);
-  // console.log('authContext', authContext);
 
-  const { setAlert, alerts } = alertContext;
   const { user } = authContext;
-  // console.log('user:', user);
 
   return (
     <>

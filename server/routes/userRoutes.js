@@ -7,6 +7,7 @@ import {
   getUserById,
   createCard,
   transfarFunds,
+  adminDepositFunds,
 } from '../controllers/userController.js';
 import { protect, admin } from '../middleware/authMiddleware.js';
 
@@ -16,5 +17,6 @@ router.post('/login', authUser);
 router.route('/:id').get(protect, getUserById);
 router.route('/:id/card').post(protect, createCard);
 router.route('/:id/send-funds').post(protect, transfarFunds);
+router.route('/deposit').post(protect, admin, adminDepositFunds);
 
 export default router;

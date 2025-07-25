@@ -15,6 +15,8 @@ import {
   CLEAR_DATA,
   TRANSFAR_FUNDS_SUCCESS,
   TRANSFAR_FUNDS_FAIL,
+  DEPOSIT_SUCCESS,
+  DEPOSIT_FAIL,
 } from '../types';
 
 // eslint-disable-next-line import/no-anonymous-default-export
@@ -63,6 +65,18 @@ export default (state, action) => {
         isLoading: false,
       };
     case TRANSFAR_FUNDS_FAIL:
+      return {
+        ...state,
+        isLoading: false,
+        error: action.payload,
+      };
+    case DEPOSIT_SUCCESS:
+      return {
+        ...state,
+        data: action.payload,
+        isLoading: false,
+      };
+    case DEPOSIT_FAIL:
       return {
         ...state,
         isLoading: false,
