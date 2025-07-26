@@ -30,25 +30,25 @@ const Sidebar = () => {
   const authContext = useContext(AuthContext);
 
   const { logout, user } = authContext;
-  const showMobilemenu = () => {
-    document.getElementById('sidebarArea').classList.toggle('showSidebar');
-  };
+  // const showMobilemenu = () => {
+  //   document.getElementById('sidebarArea').classList.toggle('showSidebar');
+  // };
   let location = useLocation();
   // console.log(user);
   // if (user?.isAdmin) return null;
   return (
     <div style={{ minWidth: '20%' }}>
-      <aside className='sidebarArea shadow' id='sidebarArea'>
+      <aside className='shadow' id=''>
         <div className='p-3' style={{ height: 'auto' }}>
           <div className='d-flex align-items-center justify-content-center'>
-            <span className='ms-auto d-lg-none'>
+            {/* <span className='ms-auto d-lg-none'>
               <Button
                 close
                 size='sm'
                 className='ms-auto d-lg-none'
-                onClick={() => showMobilemenu()}
+                // onClick={() => showMobilemenu()}
               ></Button>
-            </span>
+            </span> */}
           </div>
           <div className='pt-4 mt-2'>
             <Nav vertical className='sidebarNav'>

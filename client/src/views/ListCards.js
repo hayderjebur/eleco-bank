@@ -13,21 +13,23 @@ const ListCards = () => {
   return (
     <>
       <div
-        className={`pageWrapper d-lg-flex mx-5 ${
+        className={`pageWrapper d-lg-flex ${
           user?.isAdmin ? 'justify-content-center' : ''
         }`}
       >
         {!user?.isAdmin ? (
-          <aside className='sidebarArea shadow' id='sidebarArea'>
-            <Sidebar />
-          </aside>
-        ) : null}
+          // <aside className='sidebarArea shadow' id='sidebarArea'>
+          <Sidebar />
+        ) : // </aside>
+        null}
 
-        <div className='mx-4'>
+        <div className='mx-4 w-100'>
           {!user?.isAdmin && (
             <Row>
-              <p>Email: {user?.email}</p>
-              <p>Number of Cards: {user?.cards?.length}</p>
+              <div style={{ marginLeft: '6rem' }}>
+                <p>Email: {user?.email}</p>
+                <p>Number of Cards: {user?.cards?.length}</p>
+              </div>
               {user?.cards?.length > 0 ? (
                 <h3 className='text-center mb-3'>Your Cards</h3>
               ) : (
@@ -35,7 +37,7 @@ const ListCards = () => {
               )}
               {user?.cards?.map((card) => {
                 return (
-                  <Col sm='6' lg='6' key={card._id} className='text-center'>
+                  <Col sm='12' lg='6' key={card._id} className='text-center'>
                     <UserCard userCard={card} userName={user.name} />
                     <h5 className='m-2'>The balance: ${card.balance}</h5>
                   </Col>

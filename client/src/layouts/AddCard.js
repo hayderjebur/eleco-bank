@@ -27,9 +27,9 @@ const AddCard = () => {
     <>
       {!user?.isAdmin ? (
         <div className='pageWrapper d-lg-flex justify-content-center mx-5 w-100'>
-          <asid className='sidebarArea shadow mx-5' id='sidebarArea'>
-            <Sidebar />
-          </asid>
+          {/* <asid className='sidebarArea shadow mx-5' id='sidebarArea'> */}
+          <Sidebar />
+          {/* </asid> */}
 
           <div className='w-100'>
             {/* <Container f> */}
