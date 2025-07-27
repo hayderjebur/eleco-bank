@@ -8,15 +8,14 @@ import Sidebar from '../layouts/Sidebar';
 const ListCards = (props) => {
   const authContext = useContext(AuthContext);
 
-  const { user, loadUser, data, isAuthenticated } = authContext;
-  console.log(user);
+  const { user, loadUser, data } = authContext;
+  console.log('user, ', user);
 
-  // useEffect(() => {
-  //   if (!isAuthenticated) {
-  //     props.history.push('/login');
-  //   }
-  //   loadUser(user?._id);
-  // }, [data]);
+  useEffect(() => {
+    if (user) {
+      loadUser(user?._id);
+    }
+  }, [data?.message]);
   return (
     <>
       <div
@@ -24,11 +23,7 @@ const ListCards = (props) => {
           user?.isAdmin ? 'justify-content-center' : ''
         }`}
       >
-        {!user?.isAdmin ? (
-          // <aside className='sidebarArea shadow' id='sidebarArea'>
-          <Sidebar />
-        ) : // </aside>
-        null}
+        {!user?.isAdmin ? <Sidebar /> : null}
 
         <div className=' w-100'>
           {!user?.isAdmin && (
