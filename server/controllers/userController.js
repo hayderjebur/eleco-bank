@@ -249,7 +249,7 @@ const transfarFunds = asyncHandler(async (req, res) => {
             foundSenderCardObject._id.toString()
         );
         if (senderCardMongoose && senderCardMongoose.balance > amount) {
-          senderCardMongoose.balance -= amount;
+          senderCardMongoose.balance -= Number(amount);
           await senderUserMongoose.save();
 
           // res.json({ message: 'Your money sent successfully' });
@@ -296,7 +296,7 @@ const transfarFunds = asyncHandler(async (req, res) => {
       );
 
       if (recipientCardMongoose) {
-        recipientCardMongoose.balance += amount;
+        recipientCardMongoose.balance += Number(amount);
         await userMongoose.save();
         const transations = {
           recipientEmail: recipientUserWithMatchingCardObject?.email,

@@ -23,7 +23,7 @@ const ListCards = () => {
         ) : // </aside>
         null}
 
-        <div className='mx-4 w-100'>
+        <div className=' w-100'>
           {!user?.isAdmin && (
             <Row>
               <div style={{ marginLeft: '6rem' }}>
