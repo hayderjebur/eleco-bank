@@ -23,6 +23,7 @@ function TransfarFundsForm() {
     sendFromCardNumber: '',
     focus: '',
     amount: 0,
+    cvc: '',
   });
 
   const alertContext = useContext(AlertContext);
@@ -32,7 +33,7 @@ function TransfarFundsForm() {
 
   const { transfarFunds, isLoading, error, data, clearErrors } = authContext;
 
-  const { sendFromCardNumber, recipientCardNumber, amount } = card;
+  const { sendFromCardNumber, recipientCardNumber, amount, cvc } = card;
   useEffect(() => {
     if (error) {
       setAlert(error, 'danger');
@@ -48,7 +49,8 @@ function TransfarFundsForm() {
     if (
       sendFromCardNumber === '' ||
       recipientCardNumber === '' ||
-      amount === 0
+      amount === 0 ||
+      cvc === ''
     ) {
       setAlert('Please fill in all fields', 'danger');
     } else {
@@ -56,6 +58,7 @@ function TransfarFundsForm() {
         amount,
         sendFromCardNumber,
         recipientCardNumber,
+        cvc,
       });
 
       if (res === 'done') {
@@ -64,6 +67,7 @@ function TransfarFundsForm() {
           amount: 0,
           recipientCardNumber: '',
           sendFromCardNumber: '',
+          cvc: '',
           focus: '',
         });
       }
@@ -93,19 +97,45 @@ function TransfarFundsForm() {
                       </CardTitle>
                       <CardBody>
                         <Form onSubmit={onSubmit}>
-                          <FormGroup className='my-2' controlid='name'>
-                            <Label>Send From:</Label>
-                            <Input
-                              type='tel'
-                              name='sendFromCardNumber'
-                              maxLength={16}
-                              placeholder='Card Number'
-                              onChange={onChange}
-                              onFocus={onChange}
-                              value={sendFromCardNumber}
-                            ></Input>
-                          </FormGroup>
-                          <FormGroup className='my-2' controlid='name'>
+                          <div className='d-flex'>
+                            <FormGroup
+                              style={{ minWidth: '75%' }}
+                              className='my-2 w-70'
+                              controlid='name'
+                            >
+                              <Label>Send From:</Label>
+                              <Input
+                                type='tel'
+                                name='sendFromCardNumber'
+                                maxLength={16}
+                                placeholder='Card Number'
+                                onChange={onChange}
+                                onFocus={onChange}
+                                value={sendFromCardNumber}
+                              ></Input>
+                            </FormGroup>
+                            <FormGroup
+                              style={{ maxWidth: '4rem' }}
+                              className='mx-4 my-2'
+                              controlid='name'
+                            >
+                              <Label>CVC</Label>
+                              <Input
+                                type='tel'
+                                name='cvc'
+                                maxLength={3}
+                                placeholder='CVC'
+                                onChange={onChange}
+                                onFocus={onChange}
+                                value={cvc}
+                              ></Input>
+                            </FormGroup>
+                          </div>
+                          <FormGroup
+                            style={{ maxWidth: '75%' }}
+                            className='my-2 '
+                            controlid='name'
+                          >
                             <Label>Send to:</Label>
                             <Input
                               type='tel'
@@ -118,7 +148,11 @@ function TransfarFundsForm() {
                             ></Input>
                           </FormGroup>
 
-                          <FormGroup className='my-2' controlid='password'>
+                          <FormGroup
+                            style={{ maxWidth: '75%' }}
+                            className='my-2'
+                            controlid='password'
+                          >
                             <Label>Amount of Money</Label>
                             <Input
                               id='exampleAmount'

@@ -213,7 +213,7 @@ const getUserById = asyncHandler(async (req, res) => {
 // @route   GET /api/users/:id/send-funds
 const transfarFunds = asyncHandler(async (req, res) => {
   const { id } = req.params;
-  const { amount, sendFromCardNumber, recipientCardNumber } = req.body;
+  const { amount, sendFromCardNumber, recipientCardNumber, cvc } = req.body;
   let senderUserWithMatchingCardObject;
   let recipientUserWithMatchingCardObject;
   let senderCardMongoose;
@@ -239,8 +239,9 @@ const transfarFunds = asyncHandler(async (req, res) => {
     }
 
     foundSenderCardObject = senderUserWithMatchingCardObject.cards.find(
-      (card) => card.cardNumber === sendFromCardNumber
+      (card) => card.cardNumber === sendFromCardNumber && card.cvc === cvc
     );
+    console.log('foundSenderCardObject', foundSenderCardObject);
     if (senderUserWithMatchingCardObject) {
       if (senderUserMongoose) {
         senderCardMongoose = senderUserMongoose.cards.find(
