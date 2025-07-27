@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import AuthContext from '../context/auth/authContext';
 import { Col, Row } from 'reactstrap';
 import UsersTables from '../components/dashboard/UsersTable';
@@ -8,8 +8,12 @@ import Sidebar from '../layouts/Sidebar';
 const ListCards = () => {
   const authContext = useContext(AuthContext);
 
-  const { user } = authContext;
+  const { user, loadUser, data } = authContext;
+  console.log(user);
 
+  useEffect(() => {
+    loadUser(user?._id);
+  }, [data]);
   return (
     <>
       <div

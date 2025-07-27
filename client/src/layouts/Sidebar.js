@@ -29,7 +29,7 @@ const navigation = [
 const Sidebar = () => {
   const authContext = useContext(AuthContext);
 
-  const { logout, user } = authContext;
+  const { logout } = authContext;
   // const showMobilemenu = () => {
   //   document.getElementById('sidebarArea').classList.toggle('showSidebar');
   // };
