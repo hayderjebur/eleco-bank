@@ -5,15 +5,18 @@ import UsersTables from '../components/dashboard/UsersTable';
 import UserCard from '../components/dashboard/UserCard';
 import Sidebar from '../layouts/Sidebar';
 
-const ListCards = () => {
+const ListCards = (props) => {
   const authContext = useContext(AuthContext);
 
-  const { user, loadUser, data } = authContext;
+  const { user, loadUser, data, isAuthenticated } = authContext;
   console.log(user);
 
-  useEffect(() => {
-    loadUser(user?._id);
-  }, [data]);
+  // useEffect(() => {
+  //   if (!isAuthenticated) {
+  //     props.history.push('/login');
+  //   }
+  //   loadUser(user?._id);
+  // }, [data]);
   return (
     <>
       <div
