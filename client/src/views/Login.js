@@ -126,68 +126,12 @@ const Login = (props) => {
               </Col>
             </Row>
             <div className='d-flex justify-content-evenly align-items-start '>
-              <Button
-                color='primary'
-                className='mt-2'
-                disabled={isLoading}
-                onClick={onSubmit}
-                outline
-              >
-                Branches
-              </Button>
-              <Button
-                color='primary'
-                className='mt-2'
-                disabled={isLoading}
-                onClick={onSubmit}
-                outline
-              >
-                About Us
-              </Button>
-              <Button
-                color='primary'
-                className='mt-2'
-                disabled={isLoading}
-                onClick={onSubmit}
-                // size='lg'
-                outline
-              >
-                Contact Us
-              </Button>
+              <Link to='/branches'>Branches</Link>
+              <Link to='/about'>About Us</Link>
+              <Link to='/contact-us'>Contact Us</Link>
             </div>
           </CardBody>
-          {/* <div className='d-flex justify-content-evenly align-items-start pb-4'>
-            <Button
-              color='primary'
-              className='mt-2'
-              disabled={isLoading}
-              onClick={onSubmit}
-              // size='lg'
-              outline
-            >
-              Branches
-            </Button>
-            <Button
-              color='primary'
-              className='mt-2'
-              disabled={isLoading}
-              onClick={onSubmit}
-              // size='lg'
-              outline
-            >
-              About Us
-            </Button>
-            <Button
-              color='primary'
-              className='mt-2'
-              disabled={isLoading}
-              onClick={onSubmit}
-              // size='lg'
-              outline
-            >
-              Contact Us
-            </Button>
-          </div> */}
+
           <p className='text-center'>
             @2025 Secure Bank System. All rights reserved.
           </p>

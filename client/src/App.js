@@ -16,6 +16,9 @@ import AddCard from './layouts/AddCard';
 import ListCards from './views/ListCards';
 import TransfarFundsForm from './components/dashboard/TransfarFundsForm';
 import TransationHistory from './views/TransationHistory';
+import About from './views/About';
+import ContactUs from './views/ContactAs';
+import Branches from './views/Branches';
 
 const App = () => {
   return (
@@ -45,6 +48,9 @@ const App = () => {
 
             <Route exact path='/register' component={Register} />
             <Route exact path='/login' component={Login} />
+            <Route exact path='/about' component={About} />
+            <Route exact path='/branches' component={Branches} />
+            <Route exact path='/contact-us' component={ContactUs} />
           </Switch>
         </Router>
       </AlertState>
